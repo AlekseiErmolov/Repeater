@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="Repeater.exe" version="1.0.0.0" publicKeyToken="adfa77a9325bcaef" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="button_grey_repeat.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Repeater" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Repeater.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Repeater.exe" size="218600">
+      <assemblyIdentity name="Repeater" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>3oLhbCO77rvzmR7cu7k/yfygwd0lrjCNt0cF/xBDDx8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="button_grey_repeat.ico" size="67646">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Ff3smKwRFmy74yCWjP5Sads4tox5wQnmWcO0+D7e1xE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Repeater.exe.config" size="907">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>9ZPAbX6l/a3kQOECtU8/RGo/+eeKwY+yrf6Qo+7RId8=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=MOSCOW\Aleksei_Ermolov" issuerKeyHash="5a46a0421eae8ee12ec9505b6da21bca0382eca3" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>y4EBLRPbjOxdsL9JId5JtaElyTBvi/totRYTo+gNr6I=</DigestValue></Reference></SignedInfo><SignatureValue>PbL4DSufFy4VYSuPx1smNzgc4G4V3zurSeuMC4nMIuJ3kmP1S0hJLzDNmJq6gI8lQNkB2fxPavvPIR0O9VgEIrbjGyrmKNep+kbkmgTvx9iZfy480ZpQu7YkrSfwybt9LhvUgzk9bolAizyUGDo7JFJO4klF59oLk6nB7HlBw/I=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>lqFnvcQBM1msaD9ncgfHQ6LhuIlQqgFuiHNWv39MKv+jwLMagySuPbtDpLICn2KrATRYWC3t22hcynhFx1Doy/Bniruqag5qNcO2mNQH9H5thn3L5ijovlNDiOdRwPpkOTzKeaBnMI7IC51TmXbRQ1vNARHtZMtQ46LP+Rq30Wc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="a2af0de8a31316b568fb8b6f30c925a1b549de2149bfb05dec8cdb132d0181cb" Description="" Url=""><as:assemblyIdentity name="Repeater.exe" version="1.0.0.0" publicKeyToken="adfa77a9325bcaef" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=MOSCOW\Aleksei_Ermolov</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>G3qO5ufEoA99ded39HBg90m8IW8/wLixpvQq0ZkfxPY=</DigestValue></Reference></SignedInfo><SignatureValue>C2yBOfhCQb2x+oQoHb7xq0CXOC8YV788X03BZYGODYRiWxyjDpXl1wPkrstPmYalv4XQfZWLR6K7zp/G6iYlGkBvDKAXsPKs+45XjDHmKzp7AQ+i9OFyBIiJy5KXR/u+w8WgPnTcR3z4upd7Lk5TeszFugThaHsuDqtNxMtq9QU=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>lqFnvcQBM1msaD9ncgfHQ6LhuIlQqgFuiHNWv39MKv+jwLMagySuPbtDpLICn2KrATRYWC3t22hcynhFx1Doy/Bniruqag5qNcO2mNQH9H5thn3L5ijovlNDiOdRwPpkOTzKeaBnMI7IC51TmXbRQ1vNARHtZMtQ46LP+Rq30Wc=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB8TCCAVqgAwIBAgIQLZKbOtPhW59HOjusRvIbBTANBgkqhkiG9w0BAQsFADA3MTUwMwYDVQQDHiwATQBPAFMAQwBPAFcAXABBAGwAZQBrAHMAZQBpAF8ARQByAG0AbwBsAG8AdjAeFw0xNTA5MDExMDI0MDVaFw0xNjA4MzExNjI0MDVaMDcxNTAzBgNVBAMeLABNAE8AUwBDAE8AVwBcAEEAbABlAGsAcwBlAGkAXwBFAHIAbQBvAGwAbwB2MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWoWe9xAEzWaxoP2dyB8dDouG4iVCqAW6Ic1a/f0wq/6PAsxqDJK49u0OksgKfYqsBNFhYLe3baFzKeEXHUOjL8GeKu6pqDmo1w7aY1Af0fm2GfcvmKOi+U0OI51HA+mQ5PMp5oGcwjsgLnVOZdtFDW80BEe1ky1Djos/5GrfRZwIDAQABMA0GCSqGSIb3DQEBCwUAA4GBAIoycqlPsWwLVjYZ6aZe18efRsu0HSCHEuMZfNfsuFi/QkP05osO/jiVc2cVid3Ozr/td0iI+8vM/u7m/bmdMct6d2tIBodN2Zeq3r0TA+4PERr3pmHPnaaXOCAIu0AEUHKUMoN/mmF5J6e76yvyCuhbFqEB6MD1w8ryAb572Tci</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
