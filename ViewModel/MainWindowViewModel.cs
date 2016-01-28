@@ -38,7 +38,9 @@ namespace Repeater.ViewModel
             LessonsLoaderXml x = new LessonsLoaderXml();
             var s = x.LoadLesson("1");
 
-            x.SaveToLessonNewCard("1", new Card() { Comment = "new", ForeignTask = "new", NativeTask = "new" });
+            x.SaveToLessonNewCard("bla", new Card() { Comment = "new", ForeignTask = "new", NativeTask = "new" });
+
+            x.CreateNewLesson("bla");
 
             _model = model;
             _loader = repository;
