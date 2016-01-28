@@ -87,9 +87,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\DataLoader.cs" />
+    <Compile Include="Classes\Entities\Cards.cs" />
     <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Classes\LessonsLoaderXml.cs" />
     <Compile Include="Classes\MetroMenu.cs" />
     <Compile Include="Classes\Themes.cs" />
+    <Compile Include="Interfaces\ICards.cs" />
     <Compile Include="Interfaces\ITheme.cs" />
     <Compile Include="Model\CardModel.cs" />
     <Compile Include="Classes\Constants.cs" />
