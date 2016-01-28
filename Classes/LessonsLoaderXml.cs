@@ -44,7 +44,7 @@ namespace Repeater.Classes
         /// <returns></returns>
         public List<ICard> LoadLesson(string id)
         {
-            var path = LessonsDirectory() + "\\" + id + ".zbr";
+            var path = LessonsDirectory() + "\\" + id + ".xml";
             if (File.Exists(path))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Cards));
@@ -81,11 +81,11 @@ namespace Repeater.Classes
 
             if (Directory.Exists(directory))
             {
-                var filesPaths = Directory.GetFiles(directory, "*.zbr");
+                var filesPaths = Directory.GetFiles(directory, "*.xml");
                 lessonsNames = filesPaths.ToList();
                 for (int i = 0; i < lessonsNames.Count(); i++)
                 {
-                    lessonsNames[i] = lessonsNames[i].Replace(directory, "").Replace(".zbr", "").Replace("\\", "");
+                    lessonsNames[i] = lessonsNames[i].Replace(directory, "").Replace(".xml", "").Replace("\\", "");
                 }
 
                 return lessonsNames;

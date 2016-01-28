@@ -8,7 +8,7 @@ namespace Repeater.Model
 {
     static class Constants
     {
-        public const string EXTENTION = ".zbr";
+        public const string EXTENTION = ".xml";
 
         public const string QUESTION = "[question]";
         public const string COMMENT = "[comment]";

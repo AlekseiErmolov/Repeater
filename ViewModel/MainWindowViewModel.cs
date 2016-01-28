@@ -35,13 +35,6 @@ namespace Repeater.ViewModel
         /// <param name="model"></param>
         public MainWindowViewModel(ILesson model, IRepository repository)
         {
-            LessonsLoaderXml x = new LessonsLoaderXml();
-            var s = x.LoadLesson("1");
-
-            x.SaveToLessonNewCard("bla", new Card() { Comment = "new", ForeignTask = "new", NativeTask = "new" });
-
-            x.CreateNewLesson("bla");
-
             _model = model;
             _loader = repository;
             _cardsService = new CardsService();

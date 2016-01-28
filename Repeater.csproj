@@ -86,7 +86,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\DataLoader.cs" />
     <Compile Include="Classes\Entities\Cards.cs" />
     <Compile Include="Classes\Helpers.cs" />
     <Compile Include="Classes\LessonsLoaderXml.cs" />

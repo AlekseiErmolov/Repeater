@@ -20,7 +20,7 @@ namespace Repeater
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             ILesson model = new LessonModel();
-            IRepository repository = new DataLoader();
+            IRepository repository = new LessonsLoaderXml();
 
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(model, repository);
 
