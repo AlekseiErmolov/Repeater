@@ -22,7 +22,7 @@ namespace Repeater.Classes
         {
             if (Helpers.IsValidFilename(lessonName.Trim()))
             {
-                string path = LessonsDirectory() + "\\" + lessonName + Constants.EXTENTION;
+                string path = Constants.GetLessonPath(lessonName.Trim());
                 var fileStream = File.Create(path);
                 fileStream.Close();
 
@@ -44,7 +44,7 @@ namespace Repeater.Classes
         /// <returns></returns>
         public List<ICard> LoadLesson(string id)
         {
-            var path = LessonsDirectory() + "\\" + id + ".xml";
+            var path = Constants.GetLessonsPath(id);
             if (File.Exists(path))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Cards));
@@ -77,7 +77,7 @@ namespace Repeater.Classes
         {
             List<string> lessonsNames;
 
-            var directory = LessonsDirectory();
+            var directory = Constants.DIRECTORY;
 
             if (Directory.Exists(directory))
             {
@@ -102,7 +102,7 @@ namespace Repeater.Classes
         /// <param name="card"></param>
         public void SaveToLessonNewCard(string lessonName, ICard card)
         {
-            string path = LessonsDirectory() + "\\" + lessonName + Constants.EXTENTION;
+            string path = Constants.GetLessonPath(lessonName);
 
             XDocument xdoc = XDocument.Load(path);
             var cards = xdoc.Descendants("CardsCollection").FirstOrDefault();
@@ -117,16 +117,6 @@ namespace Repeater.Classes
                 cards.Add(xElem);
                 xdoc.Save(path);
             }
-        }
-
-
-        /// <summary>
-        /// Директория 
-        /// </summary>
-        /// <returns></returns>
-        private string LessonsDirectory()
-        {
-            return Directory.GetCurrentDirectory() + Constants.DIRECTORY;
         }
     }
 }
