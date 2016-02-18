@@ -482,6 +482,13 @@
                                 <Image Source="{StaticResource SaveAndNewImage}" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem 
+                            Command="{Binding EditCardCommand}"
+                            Header="Edit Card">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource SaveAndNewImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
 

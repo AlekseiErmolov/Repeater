@@ -14,6 +14,14 @@ namespace Repeater.Classes
     class LessonsLoaderXml : IRepository
     {
 
+        private ILoggerWrap _logger;
+
+        public LessonsLoaderXml(ILoggerWrap logger)
+        {
+            _logger = logger;
+        }
+
+
         /// <summary>
         /// Создает новый урок
         /// </summary>
@@ -102,20 +110,60 @@ namespace Repeater.Classes
         /// <param name="card"></param>
         public void SaveToLessonNewCard(string lessonName, ICard card)
         {
+            if (string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
+                return;
+
+
             string path = Constants.GetLessonPath(lessonName);
 
-            XDocument xdoc = XDocument.Load(path);
-            var cards = xdoc.Descendants("CardsCollection").FirstOrDefault();
-            if(cards != null)
+            try
             {
-                XElement xElem = new XElement("Card",
-                    new XElement("Comment", card.Comment),
-                    new XElement("ForeignTask", card.ForeignTask),
-                    new XElement("NativeTask", card.NativeTask),
-                    new XElement("UserAnswer", card.UserAnswer));
+                XDocument xdoc = XDocument.Load(path);
+                var cards = xdoc.Descendants("CardsCollection").FirstOrDefault();
+                if (cards != null)
+                {
+                    XElement xElem = new XElement("Card",
+                        new XElement("Comment", card.Comment),
+                        new XElement("ForeignTask", card.ForeignTask),
+                        new XElement("NativeTask", card.NativeTask),
+                        new XElement("UserAnswer", card.UserAnswer));
 
-                cards.Add(xElem);
+                    cards.Add(xElem);
+                    xdoc.Save(path);
+                    _logger.WriteInfo("The card has been saved.");
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.WriteError("Error with saving card: " + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Удаляет заданную карту
+        /// </summary>
+        /// <param name="lessonName"></param>
+        /// <param name="card"></param>
+        public void DeleteCard(string lessonName, ICard card)
+        {
+            string path = Constants.GetLessonPath(lessonName);
+
+            try
+            {
+                XDocument xdoc = XDocument.Load(path);
+                xdoc.Descendants("CardsCollection").Descendants("Card")
+                    .Where(
+                        x => x.Descendants("ForeignTask").First().Value.Equals(card.ForeignTask)
+                        && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
+                    .First()
+                    .Remove();
                 xdoc.Save(path);
+                _logger.WriteInfo("The card has been deleted.");
+            }
+            catch(Exception ex)
+            {
+                _logger.WriteError("Error with deleting card: " + ex.Message);
             }
         }
     }

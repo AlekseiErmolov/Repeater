@@ -19,8 +19,9 @@ namespace Repeater
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            ILoggerWrap logger = new NLogWrap();
             ILesson model = new LessonModel();
-            IRepository repository = new LessonsLoaderXml();
+            IRepository repository = new LessonsLoaderXml(logger);
 
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(model, repository);
 

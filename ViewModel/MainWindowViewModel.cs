@@ -62,7 +62,7 @@ namespace Repeater.ViewModel
             ClearCard();
             
             OpenSelectedLesson(name);
-            NewLessonFileName = name;
+            OpenedLesson = name;
             IsRepeat = false;
         }
 
@@ -446,80 +446,24 @@ namespace Repeater.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        private string _NewLessonFileName;
-        public string NewLessonFileName
+        private string _OpenedLesson;
+        public string OpenedLesson
         {
             get
             {
-                return _NewLessonFileName;
+                return _OpenedLesson;
             }
 
             set
             {
-                _NewLessonFileName = value;
-                NotifyPropertyChanged("NewLessonFileName");
+                _OpenedLesson = value;
+                NotifyPropertyChanged("OpenedLesson");
             }
         }
 
         #endregion
 
-        #region Commands
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _RepeatCommand;
-        public ICommand RepeatCommand
-        {
-            get
-            {
-                if (_RepeatCommand == null)
-                    _RepeatCommand = new RelayCommand<object>(RepeatCommandHandler);
-                return _RepeatCommand;
-            }
-            set
-            {
-                _RepeatCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private void RepeatCommandHandler(object obj)
-        {
-            Repeat();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _GreyBlueThemeCommand;
-        public ICommand GreyBlueThemeCommand
-        {
-            get
-            {
-                if (_GreyBlueThemeCommand == null)
-                    _GreyBlueThemeCommand = new RelayCommand<object>(GreyBlueThemeCommandHandler);
-                return _GreyBlueThemeCommand;
-            }
-            set
-            {
-                _GreyBlueThemeCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private void GreyBlueThemeCommandHandler(object obj)
-        {
-            Theme = new ThemeBlueGrey();
-            Properties.Settings.Default.Theme = "GreyBlue";
-            Properties.Settings.Default.Save();
-        }
+        #region ThemesCommands
 
         /// <summary>
         /// 
@@ -608,6 +552,38 @@ namespace Repeater.ViewModel
             Properties.Settings.Default.Save();
         }
 
+        #endregion
+
+
+        #region Commands
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private ICommand _RepeatCommand;
+        public ICommand RepeatCommand
+        {
+            get
+            {
+                if (_RepeatCommand == null)
+                    _RepeatCommand = new RelayCommand<object>(RepeatCommandHandler);
+                return _RepeatCommand;
+            }
+            set
+            {
+                _RepeatCommand = value;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void RepeatCommandHandler(object obj)
+        {
+            Repeat();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -632,7 +608,7 @@ namespace Repeater.ViewModel
         /// <param name="obj"></param>
         private void SaveCardCommandHandler(object obj)
         {
-            _loader.SaveToLessonNewCard(NewLessonFileName, _displayedCard);
+            _loader.SaveToLessonNewCard(OpenedLesson, _displayedCard);
             IsEnableMakeCard = false;
             ClearCard();
         }
@@ -661,10 +637,40 @@ namespace Repeater.ViewModel
         /// <param name="obj"></param>
         private void SaveCardAndNewCommandHandler(object obj)
         {
-            _loader.SaveToLessonNewCard(NewLessonFileName, _displayedCard);
+            _loader.SaveToLessonNewCard(OpenedLesson, _displayedCard);
             IsEnableMakeCard = true;
             ClearCard();
         }
+
+
+        /// <summary>
+        /// Команда изменить карточку
+        /// </summary>
+        private ICommand _EditCardCommand;
+        public ICommand EditCardCommand
+        {
+            get
+            {
+                if (_EditCardCommand == null)
+                    _EditCardCommand = new RelayCommand<object>(EditCardCommandHandler);
+                return _EditCardCommand;
+            }
+            set
+            {
+                _EditCardCommand = value;
+            }
+        }
+
+        /// <summary>
+        /// Хендлер для операции изменения карточки
+        /// </summary>
+        /// <param name="obj"></param>
+        private void EditCardCommandHandler(object obj)
+        {
+            _loader.DeleteCard(OpenedLesson, _displayedCard);
+            IsEnableMakeCard = true;
+        }
+
 
         /// <summary>
         /// 
@@ -750,7 +756,7 @@ namespace Repeater.ViewModel
         {
             IsEnableToEnterFileName = false;
 
-            _loader.CreateNewLesson(NewLessonFileName);
+            _loader.CreateNewLesson(OpenedLesson);
             _model.LessonsNames = _loader.LoadLessonsName();
             NotifyPropertyChanged("Menu");
         }
@@ -772,7 +778,6 @@ namespace Repeater.ViewModel
                 _enterCommand = value;
             }
         }
-
 
         /// <summary>
         /// Обработчик нажатия Enter на поле с ответами
@@ -938,10 +943,10 @@ namespace Repeater.ViewModel
         /// </summary>
         private void Repeat()
         {
-            if (!String.IsNullOrEmpty(NewLessonFileName))
+            if (!String.IsNullOrEmpty(OpenedLesson))
             {
                 ClearCard();
-                OpenSelectedLesson(NewLessonFileName);
+                OpenSelectedLesson(OpenedLesson);
                 IsRepeat = false;
             }
         }
