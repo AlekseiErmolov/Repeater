@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Repeater.Model;
 using Repeater.Interfaces;
-using System.IO;
-using Repeater.Classes;
 
 namespace Repeater.Services
 {
     class CardsService : IRandomize
     {
-        Random _rnd;
+        readonly Random _rnd;
         
         public CardsService()
         {
@@ -30,9 +24,9 @@ namespace Repeater.Services
         {
             ICard card = null;
 
-            if (lesson != null && lesson.Count() > 0)
+            if (lesson != null && lesson.Any())
             {
-                var x = _rnd.Next(0, lesson.Count());
+                var x = _rnd.Next(0, lesson.Count);
 
                 card = lesson.ElementAt(x);
 

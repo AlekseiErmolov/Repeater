@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -14,8 +10,9 @@ namespace Repeater.ViewModel
         //basic ViewModelBase
         internal void NotifyPropertyChanged(string prop)
         {
-            if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         //Extra Stuff, shows why a base ViewModel is useful

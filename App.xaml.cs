@@ -2,12 +2,6 @@
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Repeater
@@ -25,9 +19,9 @@ namespace Repeater
 
             MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(model, repository);
 
-            this.MainWindow = new MainWindow();
-            this.MainWindow.DataContext = mainWindowViewModel;
-            this.MainWindow.Show();
+            MainWindow = new MainWindow();
+            MainWindow.DataContext = mainWindowViewModel;
+            MainWindow.Show();
         }
 
     }

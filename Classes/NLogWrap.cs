@@ -5,12 +5,7 @@ namespace Repeater.Classes
 {
     public class NLogWrap : ILoggerWrap
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public NLogWrap()
-        {
-
-        }
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public void WriteDebug(string message)
         {

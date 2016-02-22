@@ -1,9 +1,4 @@
-﻿using Repeater.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Repeater.Interfaces
 {
@@ -27,7 +22,7 @@ namespace Repeater.Interfaces
         /// <summary>
         /// Метод создания урока в репозитории
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="lessonName"></param>
         void CreateNewLesson(string lessonName);
 
         /// <summary>

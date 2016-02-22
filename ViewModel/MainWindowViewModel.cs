@@ -4,12 +4,6 @@ using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.Services;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -18,11 +12,11 @@ namespace Repeater.ViewModel
     class MainWindowViewModel : ViewModelBase
     {
         #region Variables
-        private ILesson _model;
-        private IRepository _loader;
-        
+        private readonly ILesson _model;
+        private readonly IRepository _loader;
+        private readonly IRandomize _cardsService;
+
         private ICommand _enterCommand;
-        private IRandomize _cardsService;
         private EnterState _enterState;
         private ICard _displayedCard;
         #endregion
@@ -408,7 +402,7 @@ namespace Repeater.ViewModel
             set
             {
                 _invertTask = value;
-                Properties.Settings.Default.Invert = value; ;
+                Properties.Settings.Default.Invert = value;
                 Properties.Settings.Default.Save();
                 NotifyPropertyChanged("InvertTask");
             }
@@ -471,12 +465,7 @@ namespace Repeater.ViewModel
         private ICommand _CyanThemeCommand;
         public ICommand CyanThemeCommand
         {
-            get
-            {
-                if (_CyanThemeCommand == null)
-                    _CyanThemeCommand = new RelayCommand<object>(CyanThemeCommandHandler);
-                return _CyanThemeCommand;
-            }
+            get { return _CyanThemeCommand ?? (_CyanThemeCommand = new RelayCommand<object>(CyanThemeCommandHandler)); }
             set
             {
                 _CyanThemeCommand = value;
@@ -502,11 +491,9 @@ namespace Repeater.ViewModel
         {
             get
             {
-                if (_GreenThemeCommand == null)
-                    _GreenThemeCommand = new RelayCommand<object>(GreenThemeCommandHandler);
-                return _GreenThemeCommand;
+                return _GreenThemeCommand ?? (_GreenThemeCommand = new RelayCommand<object>(GreenThemeCommandHandler));
             }
-            set
+            private set
             {
                 _GreenThemeCommand = value;
             }
@@ -529,12 +516,7 @@ namespace Repeater.ViewModel
         private ICommand _BlueThemeCommand;
         public ICommand BlueThemeCommand
         {
-            get
-            {
-                if (_BlueThemeCommand == null)
-                    _BlueThemeCommand = new RelayCommand<object>(BlueThemeCommandHandler);
-                return _BlueThemeCommand;
-            }
+            get { return _BlueThemeCommand ?? (_BlueThemeCommand = new RelayCommand<object>(BlueThemeCommandHandler)); }
             set
             {
                 _BlueThemeCommand = value;
@@ -563,12 +545,7 @@ namespace Repeater.ViewModel
         private ICommand _RepeatCommand;
         public ICommand RepeatCommand
         {
-            get
-            {
-                if (_RepeatCommand == null)
-                    _RepeatCommand = new RelayCommand<object>(RepeatCommandHandler);
-                return _RepeatCommand;
-            }
+            get { return _RepeatCommand ?? (_RepeatCommand = new RelayCommand<object>(RepeatCommandHandler)); }
             set
             {
                 _RepeatCommand = value;
@@ -590,12 +567,7 @@ namespace Repeater.ViewModel
         private ICommand _SaveCardCommand;
         public ICommand SaveCardCommand
         {
-            get
-            {
-                if (_SaveCardCommand == null)
-                    _SaveCardCommand = new RelayCommand<object>(SaveCardCommandHandler);
-                return _SaveCardCommand;
-            }
+            get { return _SaveCardCommand ?? (_SaveCardCommand = new RelayCommand<object>(SaveCardCommandHandler)); }
             set
             {
                 _SaveCardCommand = value;
@@ -621,9 +593,8 @@ namespace Repeater.ViewModel
         {
             get
             {
-                if (_SaveCardAndNewCommand == null)
-                    _SaveCardAndNewCommand = new RelayCommand<object>(SaveCardAndNewCommandHandler);
-                return _SaveCardAndNewCommand;
+                return _SaveCardAndNewCommand ??
+                       (_SaveCardAndNewCommand = new RelayCommand<object>(SaveCardAndNewCommandHandler));
             }
             set
             {
@@ -649,12 +620,7 @@ namespace Repeater.ViewModel
         private ICommand _EditCardCommand;
         public ICommand EditCardCommand
         {
-            get
-            {
-                if (_EditCardCommand == null)
-                    _EditCardCommand = new RelayCommand<object>(EditCardCommandHandler);
-                return _EditCardCommand;
-            }
+            get { return _EditCardCommand ?? (_EditCardCommand = new RelayCommand<object>(EditCardCommandHandler)); }
             set
             {
                 _EditCardCommand = value;
@@ -678,12 +644,7 @@ namespace Repeater.ViewModel
         private ICommand _AddCardCommand;
         public ICommand AddCardCommand
         {
-            get
-            {
-                if (_AddCardCommand == null)
-                    _AddCardCommand = new RelayCommand<object>(AddCardCommandHandler);
-                return _AddCardCommand;
-            }
+            get { return _AddCardCommand ?? (_AddCardCommand = new RelayCommand<object>(AddCardCommandHandler)); }
             set
             {
                 _AddCardCommand = value;
@@ -708,12 +669,7 @@ namespace Repeater.ViewModel
         private ICommand _NewLessonCommand;
         public ICommand NewLessonCommand
         {
-            get
-            {
-                if (_NewLessonCommand == null)
-                    _NewLessonCommand = new RelayCommand<object>(NewLessonCommandHandler);
-                return _NewLessonCommand;
-            }
+            get { return _NewLessonCommand ?? (_NewLessonCommand = new RelayCommand<object>(NewLessonCommandHandler)); }
             set
             {
                 _NewLessonCommand = value;
@@ -737,9 +693,8 @@ namespace Repeater.ViewModel
         {
             get
             {
-                if (_CreateNewLessonFileCommand == null)
-                    _CreateNewLessonFileCommand = new RelayCommand<object>(CreateNewLessonFileCommandHandler);
-                return _CreateNewLessonFileCommand;
+                return _CreateNewLessonFileCommand ??
+                       (_CreateNewLessonFileCommand = new RelayCommand<object>(CreateNewLessonFileCommandHandler));
             }
             set
             {
@@ -766,12 +721,7 @@ namespace Repeater.ViewModel
         /// </summary>
         public ICommand EnterCommand
         {
-            get
-            {
-                if (_enterCommand == null)
-                    _enterCommand = new RelayCommand<object>(EnterCommandHandler);
-                return _enterCommand;
-            }
+            get { return _enterCommand ?? (_enterCommand = new RelayCommand<object>(EnterCommandHandler)); }
 
             set
             {
@@ -832,7 +782,7 @@ namespace Repeater.ViewModel
             if (!String.IsNullOrEmpty(name))
             {
                 _model.Cards = _loader.LoadLesson(name);
-                CardsCount = _model.Cards.Count();
+                CardsCount = _model.Cards.Count;
 
                 var tmp = _model.Cards;
                 _displayedCard = _cardsService.GetCardReduceList(ref tmp);

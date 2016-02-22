@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
 namespace Repeater.Model
@@ -30,7 +27,7 @@ namespace Repeater.Model
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
             if (execute == null)
-                throw new ArgumentNullException("execute");
+                throw new ArgumentNullException(nameof(execute));
 
             _execute = execute;
             _canExecute = canExecute;

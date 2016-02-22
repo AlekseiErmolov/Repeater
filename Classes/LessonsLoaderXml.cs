@@ -14,7 +14,7 @@ namespace Repeater.Classes
     class LessonsLoaderXml : IRepository
     {
 
-        private ILoggerWrap _logger;
+        private readonly ILoggerWrap _logger;
 
         public LessonsLoaderXml(ILoggerWrap logger)
         {
@@ -67,7 +67,7 @@ namespace Repeater.Classes
 
                     return cards.CardsCollection.ToList<ICard>();
                 }
-                catch (Exception ex)
+                catch
                 {
 
                 }
@@ -83,15 +83,13 @@ namespace Repeater.Classes
         /// <returns></returns>
         public List<string> LoadLessonsName()
         {
-            List<string> lessonsNames;
-
             var directory = Constants.DIRECTORY;
 
             if (Directory.Exists(directory))
             {
                 var filesPaths = Directory.GetFiles(directory, "*.xml");
-                lessonsNames = filesPaths.ToList();
-                for (int i = 0; i < lessonsNames.Count(); i++)
+                var lessonsNames = filesPaths.ToList();
+                for (int i = 0; i < lessonsNames.Count; i++)
                 {
                     lessonsNames[i] = lessonsNames[i].Replace(directory, "").Replace(".xml", "").Replace("\\", "");
                 }
@@ -153,10 +151,8 @@ namespace Repeater.Classes
             {
                 XDocument xdoc = XDocument.Load(path);
                 xdoc.Descendants("CardsCollection").Descendants("Card")
-                    .Where(
-                        x => x.Descendants("ForeignTask").First().Value.Equals(card.ForeignTask)
+                    .First(x => x.Descendants("ForeignTask").First().Value.Equals(card.ForeignTask)
                         && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
-                    .First()
                     .Remove();
                 xdoc.Save(path);
                 _logger.WriteInfo("The card has been deleted.");
