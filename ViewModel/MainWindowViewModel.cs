@@ -216,12 +216,14 @@ namespace Repeater.ViewModel
             get
             {
                 _menu.Clear();
-                foreach (var lesson in _model.LessonsNames)
+                if (_model.LessonsNames != null)
                 {
-                    if (String.IsNullOrEmpty(lesson)) continue;
-                    _menu.Add(lesson.Length <= 15 ? lesson : lesson.Substring(0, 15));
+                    foreach (var lesson in _model.LessonsNames)
+                    {
+                        if (string.IsNullOrEmpty(lesson)) continue;
+                        _menu.Add(lesson.Length <= 15 ? lesson : lesson.Substring(0, 15));
+                    }
                 }
-
                 return _menu;
             }
 
