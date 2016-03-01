@@ -27,7 +27,6 @@ namespace Repeater.ViewModel
         /// Конструктор ViewModel главного окна
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="repository"></param>
         public MainWindowViewModel(ILesson model, IRepository repository)
         {
             _model = model;

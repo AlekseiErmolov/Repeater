@@ -17,12 +17,10 @@ namespace Repeater
             ILesson model = new LessonModel();
             IRepository repository = new LessonsLoaderXml(logger);
 
-            var mainWindowViewModel = new MainWindowViewModel(model, repository);
+            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(model, repository);
 
-            MainWindow = new MainWindow
-            {
-                DataContext = mainWindowViewModel
-            };
+            MainWindow = new MainWindow();
+            MainWindow.DataContext = mainWindowViewModel;
             MainWindow.Show();
         }
 
