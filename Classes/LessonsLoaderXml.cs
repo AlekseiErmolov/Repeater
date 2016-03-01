@@ -41,6 +41,8 @@ namespace Repeater.Classes
 
                 xdoc.Add(xElem);
                 xdoc.Save(path);
+
+                _logger.WriteInfo(string.Format("The new lesson has been created. Name: {0}", lessonName));
             }
         }
 
