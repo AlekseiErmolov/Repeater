@@ -128,7 +128,7 @@ namespace Repeater.Classes
 
                     cards.Add(xElem);
                     xdoc.Save(path);
-                    _logger.WriteInfo("The card has been saved.");
+                    _logger.WriteInfo(string.Format("The card has been saved. To: {0} Card: {1}", lessonName, card.ForeignTask));
                 }
             }
             catch(Exception ex)
@@ -155,7 +155,7 @@ namespace Repeater.Classes
                         && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
                     .Remove();
                 xdoc.Save(path);
-                _logger.WriteInfo("The card has been deleted.");
+                _logger.WriteInfo(string.Format("The card has been deleted. From: {0} Card: {1}",lessonName, card.ForeignTask));
             }
             catch(Exception ex)
             {

@@ -65,6 +65,21 @@ namespace Repeater.ViewModel
 
         #region Properties
 
+        private string _newLessonName;
+        public string NewLessonName
+        {
+            get
+            {
+                return _newLessonName;
+            }
+
+            set
+            {
+                _newLessonName = value;
+                NotifyPropertyChanged("NewLessonName");
+            }
+        }
+
         private bool _IsRepeat;
         public bool IsRepeat
         {
@@ -714,7 +729,7 @@ namespace Repeater.ViewModel
         {
             IsEnableToEnterFileName = false;
 
-            _loader.CreateNewLesson(OpenedLesson);
+            _loader.CreateNewLesson(NewLessonName);
             _model.LessonsNames = _loader.LoadLessonsName();
             NotifyPropertyChanged("Menu");
         }

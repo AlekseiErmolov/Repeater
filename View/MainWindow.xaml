@@ -532,7 +532,7 @@
                 </StackPanel>
 
                 <TextBox 
-                    Text="{Binding NewLessonFileName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"
+                    Text="{Binding NewLessonName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"
                     Visibility="{Binding IsEnableToEnterFileName, Converter={StaticResource BooleanToVisibilityConverter}}" 
                     MinWidth="120"
                     FontFamily="Segoe UI Light" 
