@@ -16,18 +16,18 @@ namespace Repeater.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
         //Extra Stuff, shows why a base ViewModel is useful
-        bool? _CloseWindowFlag;
+        private bool? _closeWindowFlag;
         public bool? CloseWindowFlag
         {
-            get { return _CloseWindowFlag; }
+            get { return _closeWindowFlag; }
             set
             {
-                _CloseWindowFlag = value;
+                _closeWindowFlag = value;
                 NotifyPropertyChanged("CloseWindowFlag");
             }
         }
 
-        public virtual void CloseWindow(bool? result = true)
+        public virtual void CloseWindow()
         {
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
             {
