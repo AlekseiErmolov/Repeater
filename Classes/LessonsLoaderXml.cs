@@ -28,16 +28,16 @@ namespace Repeater.Classes
         /// <param name="lessonName"></param>
         public void CreateNewLesson(string lessonName)
         {
-            if (lessonName != null
-                && Helpers.IsValidFilename(lessonName.Trim()))
+            if (Helpers.IsValidFilename(lessonName.Trim()))
             {
-                var path = Constants.GetLessonPath(lessonName.Trim());
+                string path = Constants.GetLessonPath(lessonName.Trim());
                 var fileStream = File.Create(path);
                 fileStream.Close();
 
-                var xdoc = new XDocument();
+                XDocument xdoc = new XDocument();
 
-                var xElem = new XElement("Cards", new XElement("CardsCollection"));
+                XElement xElem = new XElement("Cards",
+                    new XElement("CardsCollection"));
 
                 xdoc.Add(xElem);
                 xdoc.Save(path);
@@ -67,9 +67,9 @@ namespace Repeater.Classes
 
                     return cards.CardsCollection.ToList<ICard>();
                 }
-                catch(Exception ex)
+                catch
                 {
-                    _logger.WriteError("Error with loading lesson: " + ex.Message);
+
                 }
             }
 
@@ -112,15 +112,15 @@ namespace Repeater.Classes
                 return;
 
 
-            var path = Constants.GetLessonPath(lessonName);
+            string path = Constants.GetLessonPath(lessonName);
 
             try
             {
-                var xdoc = XDocument.Load(path);
+                XDocument xdoc = XDocument.Load(path);
                 var cards = xdoc.Descendants("CardsCollection").FirstOrDefault();
                 if (cards != null)
                 {
-                    var xElem = new XElement("Card",
+                    XElement xElem = new XElement("Card",
                         new XElement("Comment", card.Comment),
                         new XElement("ForeignTask", card.ForeignTask),
                         new XElement("NativeTask", card.NativeTask),
@@ -149,7 +149,7 @@ namespace Repeater.Classes
 
             try
             {
-                var xdoc = XDocument.Load(path);
+                XDocument xdoc = XDocument.Load(path);
                 xdoc.Descendants("CardsCollection").Descendants("Card")
                     .First(x => x.Descendants("ForeignTask").First().Value.Equals(card.ForeignTask)
                         && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
