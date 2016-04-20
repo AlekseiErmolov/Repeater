@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Repeater.Classes.Helpers
+namespace Repeater.Classes
 {
     public class RelayCommand : ICommand
     {

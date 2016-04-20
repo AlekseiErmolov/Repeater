@@ -91,20 +91,25 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Entities\Cards.cs" />
+    <Compile Include="Classes\Enums\EnterState.cs" />
+    <Compile Include="Classes\Enums\HeaderFind.cs" />
     <Compile Include="Classes\Helpers\CommonHelpers.cs" />
     <Compile Include="Classes\Helpers\RelayCommand.cs" />
-    <Compile Include="Classes\LessonsLoaderXml.cs" />
-    <Compile Include="Classes\MetroMenu.cs" />
-    <Compile Include="Classes\NLogWrap.cs" />
-    <Compile Include="Classes\SimpleLesson.cs" />
-    <Compile Include="Classes\Themes.cs" />
+    <Compile Include="Classes\Helpers\LessonsLoaderXml.cs" />
+    <Compile Include="Classes\Logs\NLogWrap.cs" />
+    <Compile Include="Classes\Entities\SimpleLesson.cs" />
+    <Compile Include="Classes\MetroMenu\MetroMenu.cs" />
+    <Compile Include="Classes\MetroMenu\MetroMenuItem.cs" />
+    <Compile Include="Classes\MetroMenu\MetroMenuResources.cs" />
+    <Compile Include="Classes\Themes\ThemeBlue.cs" />
+    <Compile Include="Classes\Themes\ThemeBlueGrey.cs" />
+    <Compile Include="Classes\Themes\ThemeCyan.cs" />
+    <Compile Include="Classes\Themes\ThemeGreen.cs" />
     <Compile Include="Interfaces\ICards.cs" />
     <Compile Include="Interfaces\ILoggerWrap.cs" />
     <Compile Include="Interfaces\ITheme.cs" />
     <Compile Include="Model\CardModel.cs" />
-    <Compile Include="Classes\Constants.cs" />
-    <Compile Include="Classes\Enums.cs" />
-    <Compile Include="Classes\RelayCommand.cs" />
+    <Compile Include="Classes\Helpers\Constants.cs" />
     <Compile Include="Model\LessonModel.cs" />
     <Compile Include="Interfaces\ICard.cs" />
     <Compile Include="Interfaces\ICardsLoader.cs" />

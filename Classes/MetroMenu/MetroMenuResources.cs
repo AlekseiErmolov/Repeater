@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
-namespace MetroListBox
+namespace Repeater.Classes
 {
     class MetroMenuResources
     {
@@ -39,72 +38,6 @@ namespace MetroListBox
         public static class CustomColor
         {
             public static SolidColorBrush Blue => new SolidColorBrush(Color.FromArgb(0xff, 0x00, 0x72, 0xc6));
-        }
-    }
-
-
-    class MetroMenu
-    {
-        private readonly ObservableCollection<MetroMenuItem> _menu;
-        private MetroMenuItem _selectedItem;
-        public delegate void MenuSelectHandler(string name);
-        public event MenuSelectHandler MenuSelectEvent;
-
-        public MetroMenuItem SelectedLesson => _selectedItem;
-
-        /// <summary>
-        /// Выбранный урок в меню уроков
-        /// </summary>
-        public MetroMenuItem MenuSelected
-        {
-            get
-            {
-                if (MenuSelectEvent != null)
-                {
-                    if(_selectedItem != null)
-                    {
-                        MenuSelectEvent(_selectedItem.Title);
-                    }
-                }
-
-                return _selectedItem;
-            }
-            set { _selectedItem = value; }
-        }
-
-        /// <summary>
-        /// Коллекция уроков
-        /// </summary>
-        public ObservableCollection<MetroMenuItem> Menu => _menu;
-
-        public MetroMenu()
-        {
-            _menu = new ObservableCollection<MetroMenuItem>();
-        }
-
-        public void Add(string name)
-        {
-            _menu.Add(new MetroMenuItem(name, MetroMenuResources.Logo.Reports));
-        }
-
-        public void Clear()
-        {
-            _menu.Clear();
-        }
-    }
-
-
-
-    class MetroMenuItem
-    {
-        public string Title { get; set; }
-
-        public Geometry Image { get; set; }
-
-        public MetroMenuItem(string title, Geometry image)
-        {
-            Image = image;
-            Title = title;
         }
     }
 }

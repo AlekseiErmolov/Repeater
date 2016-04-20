@@ -1,4 +1,4 @@
-﻿namespace Repeater.Model
+﻿namespace Repeater.Classes
 {
     static class Constants
     {

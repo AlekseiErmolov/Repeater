@@ -153,8 +153,8 @@
             ItemsSource="{Binding Cards}"
             >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Foreign Word" Width="140" Binding="{Binding Path=ForeignTasks, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Native Word" Width="140" Binding="{Binding Path=NativeTasks, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Foreign Word" Width="auto" Binding="{Binding Path=ForeignTasks, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Native Word" Width="*" Binding="{Binding Path=NativeTasks, Mode=TwoWay}"/>
             </DataGrid.Columns>
         </DataGrid>
 
