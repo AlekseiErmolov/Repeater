@@ -1,8 +1,10 @@
 ﻿using MetroListBox;
 using Repeater.Classes;
+using Repeater.Classes.Helpers;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.Services;
+using Repeater.View;
 using System;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -46,6 +48,7 @@ namespace Repeater.ViewModel
             IsRepeat = false;
 
             _model.LessonsNames = _loader.LoadLessonsName();
+            NextExampleCommand = new Classes.Helpers.RelayCommand(OpenInfoWindow);
         }
 
         /// <summary>
@@ -64,6 +67,8 @@ namespace Repeater.ViewModel
         #endregion
 
         #region Properties
+
+        public Classes.Helpers.RelayCommand NextExampleCommand { get; set; }
 
         private string _newLessonName;
         public string NewLessonName
@@ -570,6 +575,8 @@ namespace Repeater.ViewModel
             }
         }
 
+        
+
         /// <summary>
         /// 
         /// </summary>
@@ -917,6 +924,13 @@ namespace Repeater.ViewModel
                 OpenSelectedLesson(OpenedLesson);
                 IsRepeat = false;
             }
+        }
+
+
+        void OpenInfoWindow(object parameter)
+        {
+            var win = new LessonInfo(new ViewModelInfoWindow(_model));
+            win.ShowDialog();
         }
 
         #endregion

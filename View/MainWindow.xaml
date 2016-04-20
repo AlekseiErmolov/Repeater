@@ -489,6 +489,13 @@
                                 <Image Source="{StaticResource SaveAndNewImage}" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem 
+                            Command="{Binding NextExampleCommand}"
+                            Header="View Info">
+                            <MenuItem.Icon>
+                                <Image Source="{StaticResource SaveAndNewImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
 

@@ -91,10 +91,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Entities\Cards.cs" />
-    <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Classes\Helpers\CommonHelpers.cs" />
+    <Compile Include="Classes\Helpers\RelayCommand.cs" />
     <Compile Include="Classes\LessonsLoaderXml.cs" />
     <Compile Include="Classes\MetroMenu.cs" />
     <Compile Include="Classes\NLogWrap.cs" />
+    <Compile Include="Classes\SimpleLesson.cs" />
     <Compile Include="Classes\Themes.cs" />
     <Compile Include="Interfaces\ICards.cs" />
     <Compile Include="Interfaces\ILoggerWrap.cs" />
@@ -112,6 +114,10 @@
     <Compile Include="Services\CardsService.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Page Include="View\LessonInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,6 +125,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\ViewModelInfoWindow.cs" />
+    <Compile Include="View\LessonInfo.xaml.cs">
+      <DependentUpon>LessonInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

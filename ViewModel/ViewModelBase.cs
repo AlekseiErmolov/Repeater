@@ -5,7 +5,7 @@ using System.Windows.Threading;
 
 namespace Repeater.ViewModel
 {
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         //basic ViewModelBase
         internal void NotifyPropertyChanged(string prop)

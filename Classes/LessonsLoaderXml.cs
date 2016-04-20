@@ -29,7 +29,7 @@ namespace Repeater.Classes
         public void CreateNewLesson(string lessonName)
         {
             if (lessonName != null
-                && Helpers.IsValidFilename(lessonName.Trim()))
+                && CommonHelpers.IsValidFilename(lessonName.Trim()))
             {
                 var path = Constants.GetLessonPath(lessonName.Trim());
                 var fileStream = File.Create(path);

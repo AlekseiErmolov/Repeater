@@ -2,7 +2,7 @@
 
 namespace Repeater.Classes
 {
-    static class Helpers
+    static class CommonHelpers
     {
         public static bool IsValidFilename(string testName)
         {
