@@ -38,5 +38,12 @@ namespace Repeater.Interfaces
         /// <param name="lessonName"></param>
         /// <param name="card"></param>
         void DeleteCard(string lessonName, ICard card);
+
+        /// <summary>
+        /// Пересохраняет урок с новым набором карточек
+        /// </summary>
+        /// <param name="lessonName"></param>
+        /// <param name="cards"></param>
+        void ResaveLesson(string lessonName, List<ICard> cards);
     }
 }

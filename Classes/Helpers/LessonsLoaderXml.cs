@@ -139,6 +139,50 @@ namespace Repeater.Classes
             }
         }
 
+        /// <summary>
+        /// Пересохраняет урок с новым набором карточек
+        /// </summary>
+        /// <param name="lessonName"></param>
+        /// <param name="cards"></param>
+        public void ResaveLesson(string lessonName, List<ICard> cards)
+        {
+            //Remove empty cards
+            List<ICard> validCard = new List<ICard>();
+            foreach (var card in cards)
+            {
+                if (string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
+                    continue;
+
+                validCard.Add(card);
+            }
+
+            var path = Constants.GetLessonPath(lessonName);
+
+            try
+            {
+                var xdoc = XDocument.Load(path);
+                var allCards = xdoc.Descendants("CardsCollection").FirstOrDefault();
+                allCards.RemoveAll();
+
+                foreach (var card in validCard)
+                {
+                    var xElem = new XElement("Card",
+                        new XElement("Comment", card.Comment),
+                        new XElement("ForeignTask", card.ForeignTask),
+                        new XElement("NativeTask", card.NativeTask),
+                        new XElement("UserAnswer", card.UserAnswer));
+                    allCards.Add(xElem);
+                }
+
+                xdoc.Save(path);
+                _logger.WriteInfo(string.Format("All cards has been saved. To: {0}", lessonName));
+            }
+            catch(Exception ex)
+            {
+                _logger.WriteError("Error with saving card: " + ex.Message);
+            }
+        }            
+
 
         /// <summary>
         /// Удаляет заданную карту

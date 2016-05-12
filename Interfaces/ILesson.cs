@@ -10,14 +10,17 @@ namespace Repeater.Interfaces
         /// <summary>
         /// Хранилище карточек урока
         /// </summary>
-        List<ICard> Cards
-        {
-            get; set;
-        }
+        List<ICard> Cards { get; set; }
+
         /// <summary>
         /// Весь список доступных уроков в хранилище
         /// </summary>
         /// <returns></returns>
         List<string> LessonsNames { get; set; }
+
+        /// <summary>
+        /// Current opened lesson name
+        /// </summary>
+        string OpenedLessonName { get; set; }
     }
 }

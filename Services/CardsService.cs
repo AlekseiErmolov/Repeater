@@ -20,7 +20,7 @@ namespace Repeater.Services
         /// </summary>
         /// <param name="lesson"></param>
         /// <returns></returns>
-        public ICard GetCardReduceList(ref List<ICard> lesson)
+        public ICard GetCardReduceList(List<ICard> lesson)
         {
             ICard card = null;
 

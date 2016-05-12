@@ -13,7 +13,7 @@ namespace Repeater.ViewModel
     {
         #region Variables
         private readonly ILesson _model;
-        private readonly IRepository _loader;
+        private readonly IRepository _repository;
         private readonly IRandomize _cardsService;
 
         private ICommand _enterCommand;
@@ -31,7 +31,7 @@ namespace Repeater.ViewModel
         public MainWindowViewModel(ILesson model, IRepository repository)
         {
             _model = model;
-            _loader = repository;
+            _repository = repository;
             _cardsService = new CardsService();
             _menu = new MetroMenu();
             _menu.MenuSelectEvent += _menu_MenuSelectEvent;
@@ -45,8 +45,8 @@ namespace Repeater.ViewModel
 
             IsRepeat = false;
 
-            _model.LessonsNames = _loader.LoadLessonsName();
-            NextExampleCommand = new RelayCommand(OpenInfoWindow);
+            _model.LessonsNames = _repository.LoadLessonsName();
+            ViewLessonInfo = new RelayCommand(OpenInfoWindow);
         }
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace Repeater.ViewModel
             ClearCard();
             
             OpenSelectedLesson(name);
+            _model.OpenedLessonName = name;
             OpenedLesson = name;
             IsRepeat = false;
         }
@@ -66,7 +67,7 @@ namespace Repeater.ViewModel
 
         #region Properties
 
-        public RelayCommand NextExampleCommand { get; set; }
+        public RelayCommand ViewLessonInfo { get; set; }
 
         private string _newLessonName;
         public string NewLessonName
@@ -461,17 +462,16 @@ namespace Repeater.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        private string _OpenedLesson;
         public string OpenedLesson
         {
             get
             {
-                return _OpenedLesson;
+                return _model.OpenedLessonName;
             }
 
             set
             {
-                _OpenedLesson = value;
+                _model.OpenedLessonName = value;
                 NotifyPropertyChanged("OpenedLesson");
             }
         }
@@ -584,107 +584,6 @@ namespace Repeater.ViewModel
             Repeat();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _SaveCardCommand;
-        public ICommand SaveCardCommand
-        {
-            get { return _SaveCardCommand ?? (_SaveCardCommand = new RelayCommand(SaveCardCommandHandler)); }
-            set
-            {
-                _SaveCardCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private void SaveCardCommandHandler(object obj)
-        {
-            _loader.SaveToLessonNewCard(OpenedLesson, _displayedCard);
-            IsEnableMakeCard = false;
-            ClearCard();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _SaveCardAndNewCommand;
-        public ICommand SaveCardAndNewCommand
-        {
-            get
-            {
-                return _SaveCardAndNewCommand ??
-                       (_SaveCardAndNewCommand = new RelayCommand(SaveCardAndNewCommandHandler));
-            }
-            set
-            {
-                _SaveCardAndNewCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private void SaveCardAndNewCommandHandler(object obj)
-        {
-            _loader.SaveToLessonNewCard(OpenedLesson, _displayedCard);
-            IsEnableMakeCard = true;
-            ClearCard();
-        }
-
-
-        /// <summary>
-        /// Команда изменить карточку
-        /// </summary>
-        private ICommand _EditCardCommand;
-        public ICommand EditCardCommand
-        {
-            get { return _EditCardCommand ?? (_EditCardCommand = new RelayCommand(EditCardCommandHandler)); }
-            set
-            {
-                _EditCardCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// Хендлер для операции изменения карточки
-        /// </summary>
-        /// <param name="obj"></param>
-        private void EditCardCommandHandler(object obj)
-        {
-            _loader.DeleteCard(OpenedLesson, _displayedCard);
-            IsEnableMakeCard = true;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _AddCardCommand;
-        public ICommand AddCardCommand
-        {
-            get { return _AddCardCommand ?? (_AddCardCommand = new RelayCommand(AddCardCommandHandler)); }
-            set
-            {
-                _AddCardCommand = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        private void AddCardCommandHandler(object obj)
-        {
-            ClearCard();
-
-            if (_menu.SelectedLesson != null)
-                IsEnableMakeCard = true;
-        }
 
         /// <summary>
         /// Команда создания нового урока
@@ -734,8 +633,8 @@ namespace Repeater.ViewModel
         {
             IsEnableToEnterFileName = false;
 
-            _loader.CreateNewLesson(NewLessonName);
-            _model.LessonsNames = _loader.LoadLessonsName();
+            _repository.CreateNewLesson(NewLessonName);
+            _model.LessonsNames = _repository.LoadLessonsName();
             NotifyPropertyChanged("Menu");
         }
 
@@ -782,9 +681,7 @@ namespace Repeater.ViewModel
                     }
                     else
                     {
-                        var tmp = _model.Cards;
-                        _displayedCard = _cardsService.GetCardReduceList(ref tmp);
-                        _model.Cards = tmp;
+                        _displayedCard = _cardsService.GetCardReduceList(_model.Cards);
                         UserText = String.Empty;
                         Forecolor = Brushes.Black;
                     }
@@ -807,12 +704,10 @@ namespace Repeater.ViewModel
         {
             if (!String.IsNullOrEmpty(name))
             {
-                _model.Cards = _loader.LoadLesson(name);
+                _model.Cards = _repository.LoadLesson(name);
                 CardsCount = _model.Cards.Count;
 
-                var tmp = _model.Cards;
-                _displayedCard = _cardsService.GetCardReduceList(ref tmp);
-                _model.Cards = tmp;
+                _displayedCard = _cardsService.GetCardReduceList(_model.Cards);
 
                 _enterState = EnterState.First;
                 RefreshCard();
@@ -930,7 +825,8 @@ namespace Repeater.ViewModel
 
         void OpenInfoWindow(object parameter)
         {
-            var win = new LessonInfo(new ViewModelInfoWindow(_model));
+            _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
+            var win = new LessonInfo(new ViewModelInfoWindow(_model, _repository));
             win.ShowDialog();
         }
 

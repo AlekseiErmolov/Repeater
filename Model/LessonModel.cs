@@ -1,5 +1,6 @@
 ﻿using Repeater.Interfaces;
 using System.Collections.Generic;
+using System;
 
 namespace Repeater.Model
 {
@@ -21,5 +22,7 @@ namespace Repeater.Model
         /// Имена всех уроков
         /// </summary>
         public List<string> LessonsNames { get; set; }
+
+        public string OpenedLessonName { get; set; }
     }
 }

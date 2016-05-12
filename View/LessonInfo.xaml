@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Repeater"
         mc:Ignorable="d"
         AllowsTransparency="True"
-        Title="LessonInfo" Height="300" Width="300" Style="{DynamicResource MetroWindowStyle}">
+        Title="LessonInfo" Height="450" Width="300" Style="{DynamicResource MetroWindowStyle}">
 
     <Window.Resources>
         <Style x:Key="MetroWindowStyle" TargetType="{x:Type Window}">
@@ -146,17 +146,26 @@
     </Window.Resources>
 
     <Grid>
-        <DataGrid 
-            x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" 
-            Width="280" Height="240"
-            AutoGenerateColumns="False"
-            ItemsSource="{Binding Cards}"
-            >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Foreign Word" Width="auto" Binding="{Binding Path=ForeignTasks, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Native Word" Width="*" Binding="{Binding Path=NativeTasks, Mode=TwoWay}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        
+
+        <DockPanel>
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Command="{Binding NewCard}" Content="New" />
+                    <Button Command="{Binding RemoveCard}" Content="Remove" />
+                    <Button Command="{Binding SaveCards}" Content="Save" />
+                </ToolBar>
+            </ToolBarTray>
+            <DataGrid 
+                x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" 
+                Width="280" Height="366"
+                AutoGenerateColumns="True"
+                ItemsSource="{Binding Cards, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedCard, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                >
+            </DataGrid>
+        </DockPanel>
+        
 
     </Grid>
 </Window>
