@@ -1,4 +1,6 @@
-﻿using Repeater.Classes;
+﻿using Microsoft.Practices.Unity;
+using Repeater.Classes;
+using Repeater.Classes.TranslateFacade;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.Services;
@@ -16,6 +18,8 @@ namespace Repeater.ViewModel
         private readonly IRepository _repository;
         private readonly IRandomize _cardsService;
 
+        readonly IUnityContainer _container;
+
         private ICommand _enterCommand;
         private EnterState _enterState;
         private ICard _displayedCard;
@@ -28,10 +32,12 @@ namespace Repeater.ViewModel
         /// </summary>
         /// <param name="model"></param>
         /// <param name="repository"></param>
-        public MainWindowViewModel(ILesson model, IRepository repository)
+        public MainWindowViewModel(IUnityContainer container)
         {
-            _model = model;
-            _repository = repository;
+            _model = container.Resolve<ILesson>();
+            _repository = container.Resolve<IRepository>();
+            _container = container;
+
             _cardsService = new CardsService();
             _menu = new MetroMenu();
             _menu.MenuSelectEvent += _menu_MenuSelectEvent;
@@ -557,7 +563,6 @@ namespace Repeater.ViewModel
 
         #endregion
 
-
         #region Commands
 
         /// <summary>
@@ -826,7 +831,7 @@ namespace Repeater.ViewModel
         void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
-            var win = new LessonInfo(new ViewModelInfoWindow(_model, _repository));
+            var win = new LessonInfo(new ViewModelInfoWindow(_container));
             win.ShowDialog();
         }
 

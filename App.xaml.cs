@@ -1,8 +1,11 @@
-﻿using Repeater.Classes;
+﻿using Microsoft.Practices.Unity;
+using Repeater.Classes;
+using Repeater.Classes.TranslateFacade;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;
 using System.Windows;
+
 
 namespace Repeater
 {
@@ -13,11 +16,15 @@ namespace Repeater
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            ILoggerWrap logger = new NLogWrap();
-            ILesson model = new LessonModel();
-            IRepository repository = new LessonsLoaderXml(logger);
+            var container = new UnityContainer();
 
-            var mainWindowViewModel = new MainWindowViewModel(model, repository);
+            container.RegisterType<ILoggerWrap, NLogWrap>();
+            container.RegisterType<ILesson, LessonModel>();
+            container.RegisterType<IRepository, LessonsLoaderXml>();
+            container.RegisterType<ITranslate, TranslateFacade>();
+            container.RegisterType<ITranslateEngine, TranslateEngine>();
+
+            var mainWindowViewModel = new MainWindowViewModel(container);
 
             MainWindow = new MainWindow
             {

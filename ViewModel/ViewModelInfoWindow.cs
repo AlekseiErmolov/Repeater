@@ -6,14 +6,18 @@ using System.Linq;
 using System.Windows.Input;
 using System;
 using Repeater.Model;
+using Repeater.Classes.TranslateFacade;
+using Microsoft.Practices.Unity;
 
 namespace Repeater.ViewModel
 {
     public class ViewModelInfoWindow : ViewModelBase
     {
         IRepository _repository;
+        ITranslate _translateFacade;
+        string TranslateKey { get; set; }
 
-
+        #region Properties
         public ILesson Lesson
         {
             get;
@@ -40,8 +44,12 @@ namespace Repeater.ViewModel
         {
             get
             {
-                var retval = new ObservableCollection<ICard>(Lesson.Cards);
-                return retval;
+                if (Lesson.Cards != null)
+                {
+                    var retval = new ObservableCollection<ICard>(Lesson.Cards);
+                    return retval;
+                }
+                return null;
             }
 
             set
@@ -49,15 +57,18 @@ namespace Repeater.ViewModel
                 Lesson.Cards = value.ToList();
             }
         }
+        #endregion
+
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="model"></param>
-        public ViewModelInfoWindow(ILesson model, IRepository repository)
+        public ViewModelInfoWindow(IUnityContainer container)
         {
-            Lesson = model;
-            _repository = repository;
+            Lesson = container.Resolve<ILesson>();
+            _repository = container.Resolve<IRepository>();
+            _translateFacade = container.Resolve<ITranslate>();
         }
 
         #region Commands
@@ -81,8 +92,11 @@ namespace Repeater.ViewModel
         /// <param name="obj"></param>
         private void NewCardHandler(object obj)
         {
-            Lesson.Cards.Add(new Card());
-            NotifyPropertyChanged("Cards");
+            if (Lesson.Cards != null)
+            {
+                Lesson.Cards.Add(new Card());
+                NotifyPropertyChanged("Cards");
+            }
         }
 
 
@@ -116,6 +130,19 @@ namespace Repeater.ViewModel
         /// <summary>
         /// Save cards to repo
         /// </summary>
+        private ICommand _autoTranslate;
+        public ICommand AutoTranslate
+        {
+            get { return _autoTranslate ?? (_autoTranslate = new RelayCommand(AutoTranslateHandler)); }
+            set
+            {
+                _autoTranslate = value;
+            }
+        }
+
+        /// <summary>
+        /// Save cards to repo
+        /// </summary>
         private ICommand _saveCards;
         public ICommand SaveCards
         {
@@ -132,7 +159,39 @@ namespace Repeater.ViewModel
         /// <param name="obj"></param>
         private void SaveCardHandler(object obj)
         {
-            _repository.ResaveLesson(Lesson.OpenedLessonName, Lesson.Cards);
+            if (Lesson.Cards != null)
+            {
+                _repository.ResaveLesson(Lesson.OpenedLessonName, Lesson.Cards);
+            }
+        }
+
+        /// <summary>
+        /// Save cards handler
+        /// </summary>
+        /// <param name="obj"></param>
+        private void AutoTranslateHandler(object obj)
+        {
+            if (Lesson.Cards != null)
+            {
+                _translateFacade.GetTranslateResultEvent += _translateFacade_GetTranslateResultEvent;
+                _translateFacade.Translate(TranslateKey, Lesson.Cards);
+            }
+        }
+
+        /// <summary>
+        /// Translate completion event - get the result
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _translateFacade_GetTranslateResultEvent(object sender, EventArgs e)
+        {
+            var ev = e as TranslateEventArgs;
+            if (ev != null)
+            {
+                TranslateKey = ev.Key;
+                Lesson.Cards = ev.Cards;
+                NotifyPropertyChanged("Cards");
+            }
         }
 
         #endregion
