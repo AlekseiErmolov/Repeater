@@ -64,9 +64,9 @@ namespace Repeater.ViewModel
         /// Constructor
         /// </summary>
         /// <param name="model"></param>
-        public ViewModelInfoWindow(IUnityContainer container)
+        public ViewModelInfoWindow(ILesson model, IUnityContainer container)
         {
-            Lesson = container.Resolve<ILesson>();
+            Lesson = model;
             _repository = container.Resolve<IRepository>();
             _translateFacade = container.Resolve<ITranslate>();
         }

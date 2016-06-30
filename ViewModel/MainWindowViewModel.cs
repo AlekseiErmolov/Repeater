@@ -831,7 +831,7 @@ namespace Repeater.ViewModel
         void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
-            var win = new LessonInfo(new ViewModelInfoWindow(_container));
+            var win = new LessonInfo(new ViewModelInfoWindow(_model, _container));
             win.ShowDialog();
         }
 
