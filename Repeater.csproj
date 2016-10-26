@@ -63,7 +63,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -118,12 +118,10 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Entities\Cards.cs" />
     <Compile Include="Classes\Enums\EnterState.cs" />
-    <Compile Include="Classes\Enums\HeaderFind.cs" />
     <Compile Include="Classes\Helpers\CommonHelpers.cs" />
     <Compile Include="Classes\Helpers\RelayCommand.cs" />
     <Compile Include="Classes\Helpers\LessonsLoaderXml.cs" />
     <Compile Include="Classes\Logs\NLogWrap.cs" />
-    <Compile Include="Classes\Entities\SimpleLesson.cs" />
     <Compile Include="Classes\MetroMenu\MetroMenu.cs" />
     <Compile Include="Classes\MetroMenu\MetroMenuItem.cs" />
     <Compile Include="Classes\MetroMenu\MetroMenuResources.cs" />

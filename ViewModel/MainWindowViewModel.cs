@@ -832,7 +832,7 @@ namespace Repeater.ViewModel
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
             var win = new LessonInfo(new ViewModelInfoWindow(_model, _container));
-            win.ShowDialog();
+            win.Show();
         }
 
         #endregion

@@ -123,9 +123,9 @@ namespace Repeater.Classes
                 if (cards != null)
                 {
                     var xElem = new XElement("Card",
-                        new XElement("Comment", card.Comment),
-                        new XElement("ForeignTask", card.ForeignTask),
-                        new XElement("NativeTask", card.NativeTask),
+                        new XElement("Comment", card.Comment.Trim()),
+                        new XElement("ForeignTask", card.ForeignTask.Trim()),
+                        new XElement("NativeTask", card.NativeTask.Trim()),
                         new XElement("UserAnswer", card.UserAnswer));
 
                     cards.Add(xElem);
@@ -153,6 +153,8 @@ namespace Repeater.Classes
                 if (string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
                     continue;
 
+                card.ForeignTask = card.ForeignTask.Trim();
+                card.NativeTask = card.NativeTask.Trim();
                 validCard.Add(card);
             }
 

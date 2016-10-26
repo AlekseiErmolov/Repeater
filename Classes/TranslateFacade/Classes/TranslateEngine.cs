@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Repeater.Interfaces;
+using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.Serialization.Json;
 using System.Web;
-using System.IO;
 using System.Xml;
 
 namespace Repeater.Classes.TranslateFacade
 {
     public class TranslateEngine : ITranslateEngine
     {
-        const string strTranslatorAccessURI = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
+        private const string strTranslatorAccessURI = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
+
+        ILoggerWrap _logger;
+
+        public TranslateEngine(ILoggerWrap logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
-        /// Получает ключ
+        ///     Получает ключ
         /// </summary>
         /// <returns></returns>
         public string GetKey()
@@ -25,7 +30,7 @@ namespace Repeater.Classes.TranslateFacade
         }
 
         /// <summary>
-        /// Делает запрос и получает переведенный текст
+        ///     Делает запрос и получает переведенный текст
         /// </summary>
         /// <param name="txtToTranslate"></param>
         /// <returns></returns>
@@ -33,12 +38,12 @@ namespace Repeater.Classes.TranslateFacade
         {
             string result = string.Empty;
 
-            var translateRequest = BuildTranslateRequest(key, txtToTranslate, from, to);
-            var response = GetResponse(translateRequest);
+            WebRequestModel translateRequest = BuildTranslateRequest(key, txtToTranslate, from, to);
+            string response = GetResponse(translateRequest);
 
             if (!string.IsNullOrEmpty(response))
             {
-                XmlDocument xTranslation = new XmlDocument();
+                var xTranslation = new XmlDocument();
                 xTranslation.LoadXml(response);
                 result = xTranslation.InnerText;
             }
@@ -47,38 +52,30 @@ namespace Repeater.Classes.TranslateFacade
         }
 
         /// <summary>
-        /// Формирует заголовок
+        ///     Асинхронный запрос
         /// </summary>
+        /// <param name="requestModel"></param>
         /// <returns></returns>
-        private string GetAuthenticateHeader()
+        public static Task<string> MakeAsyncRequest(WebRequestModel requestModel)
         {
-            var requestModel = BuildAuthentificateWebService();
+            var task = Task.Factory.FromAsync(
+                requestModel.Request.BeginGetResponse,
+                asyncResult => requestModel.Request.EndGetResponse(asyncResult),
+                null);
 
-            // Get the request stream.
-            using (Stream dataStream = requestModel.Request.GetRequestStream())
-            {
-                dataStream.Write(requestModel.ByteArray, 0, requestModel.ByteArray.Length);
-                dataStream.Close();
-            }
-
-            var response = GetResponse(requestModel);
-            AdmAccessToken token = JsonHelper.From<AdmAccessToken>(response);
-            string headerValue = "Bearer " + token.access_token;
-
-            return headerValue;
+            return task.ContinueWith(t => ReadStreamFromResponse(t.Result));
         }
 
-
         /// <summary>
-        /// Билдит запрос для авторизации
+        ///     Билдит запрос для авторизации
         /// </summary>
         /// <returns></returns>
         private WebRequestModel BuildAuthentificateWebService()
         {
-            string clientID = "5a4baa75-86e3-4523-b2bc-3bfcda5023fa";
-            string clientSecret = "UnFTrIdP4RkbZBkJx5eTIJqP37yX0+maqhAsCzJ8cEk";
+            var clientID = "5a4baa75-86e3-4523-b2bc-3bfcda5023fa";
+            var clientSecret = "UnFTrIdP4RkbZBkJx5eTIJqP37yX0+maqhAsCzJ8cEk";
 
-            String strRequestDetails =
+            string strRequestDetails =
                 string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&scope=http://api.microsofttranslator.com",
                     HttpUtility.UrlEncode(clientID),
                     HttpUtility.UrlEncode(clientSecret));
@@ -86,7 +83,7 @@ namespace Repeater.Classes.TranslateFacade
             WebRequest webRequest = WebRequest.Create(strTranslatorAccessURI);
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.Method = "POST";
-            byte[] bytes = Encoding.ASCII.GetBytes(strRequestDetails);
+            var bytes = Encoding.ASCII.GetBytes(strRequestDetails);
 
             var retval = new WebRequestModel
             {
@@ -97,9 +94,8 @@ namespace Repeater.Classes.TranslateFacade
             return retval;
         }
 
-
         /// <summary>
-        /// Формирует запрос для перевода
+        ///     Формирует запрос для перевода
         /// </summary>
         /// <param name="txtToTranslate"></param>
         /// <param name="from"></param>
@@ -124,23 +120,45 @@ namespace Repeater.Classes.TranslateFacade
             return retval;
         }
 
+        /// <summary>
+        ///     Формирует заголовок
+        /// </summary>
+        /// <returns></returns>
+        private string GetAuthenticateHeader()
+        {
+            WebRequestModel requestModel = BuildAuthentificateWebService();
+
+            // Get the request stream.
+            using (Stream dataStream = requestModel.Request.GetRequestStream())
+            {
+                dataStream.Write(requestModel.ByteArray, 0, requestModel.ByteArray.Length);
+                dataStream.Close();
+            }
+
+            string response = GetResponse(requestModel);
+            var token = JsonHelper.From<AdmAccessToken>(response);
+            string headerValue = "Bearer " + token.access_token;
+
+            return headerValue;
+        }
 
         /// <summary>
-        /// Получение результат
+        ///     Получение результат
         /// </summary>
         /// <param name="requestModel"></param>
         /// <returns></returns>
         private string GetResponse(WebRequestModel requestModel)
         {
             string answer = string.Empty;
+
             // Get the response.
             try
             {
-                using (var response = requestModel.Request.GetResponse())
+                using (WebResponse response = requestModel.Request.GetResponse())
                 {
-                    using (var dataStream = response.GetResponseStream())
+                    using (Stream dataStream = response.GetResponseStream())
                     {
-                        using (StreamReader reader = new StreamReader(dataStream))
+                        using (var reader = new StreamReader(dataStream))
                         {
                             string responseFromServer = reader.ReadToEnd();
                             if (!string.IsNullOrEmpty(responseFromServer))
@@ -151,52 +169,58 @@ namespace Repeater.Classes.TranslateFacade
                     }
                 }
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                var err = ex.Message;
+                string finalMessage = string.Empty;
+                var message = GetResponceMessage(ex.Response);
+                if (!string.IsNullOrEmpty(message))
+                {
+                    finalMessage = "Response is:\r\n" + message;
+                }
+                _logger.WriteError(string.IsNullOrEmpty(finalMessage) ? ex.Message : finalMessage);
             }
 
             return answer;
         }
 
-
-        /// <summary>
-        /// Асинхронный запрос
-        /// </summary>
-        /// <param name="requestModel"></param>
-        /// <returns></returns>
-        public static Task<string> MakeAsyncRequest(WebRequestModel requestModel)
+        private string GetResponceMessage(WebResponse response)
         {
-            Task<WebResponse> task = Task.Factory.FromAsync(
-                requestModel.Request.BeginGetResponse,
-                asyncResult => requestModel.Request.EndGetResponse(asyncResult),
-                (object)null);
+            string message = string.Empty;
 
-            return task.ContinueWith(t => ReadStreamFromResponse(t.Result));
+            if (response != null)
+            {
+                using (var stream = response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    message = reader.ReadToEnd();
+                }
+            }
+
+            return message;
         }
 
-
         /// <summary>
-        /// Читает ответ
+        ///     Читает ответ
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
         private static string ReadStreamFromResponse(WebResponse response)
         {
             using (Stream responseStream = response.GetResponseStream())
-            using (StreamReader sr = new StreamReader(responseStream))
             {
-                //Need to return this response 
-                string strContent = sr.ReadToEnd();
-                if (!string.IsNullOrEmpty(strContent))
+                using (var sr = new StreamReader(responseStream))
                 {
-                    XmlDocument xTranslation = new XmlDocument();
-                    xTranslation.LoadXml(strContent);
-                    strContent = xTranslation.InnerText;
+                    //Need to return this response 
+                    string strContent = sr.ReadToEnd();
+                    if (!string.IsNullOrEmpty(strContent))
+                    {
+                        var xTranslation = new XmlDocument();
+                        xTranslation.LoadXml(strContent);
+                        strContent = xTranslation.InnerText;
+                    }
+                    return strContent;
                 }
-                return strContent;
             }
         }
-
     }
 }
