@@ -625,13 +625,14 @@
             <TextBox
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
-                IsEnabled="{Binding IsEnableMakeCard}"
-                FontFamily="Segoe UI Light" FontSize="20"
+                IsEnabled="{Binding IsEnableMakeCard}" 
+                FontSize="20"
+                FontWeight="Bold"
                 Background="{Binding TextColor}"
                 Grid.Row="0" 
                 Height="auto" 
                 Margin="2,2,5,0"
-                Text="{Binding ForeignTask, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}" >
+                Text="{Binding ForeignTask, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}">
                 <TextBox.Effect>
                     <DropShadowEffect ShadowDepth="5" Color="#37474F" Opacity=".4" RenderingBias="Performance"/>
                 </TextBox.Effect>
@@ -673,8 +674,9 @@
             <TextBox 
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
-                IsEnabled="{Binding IsEnableMakeCard}"
-                FontFamily="Segoe UI Light" FontSize="20"
+                IsEnabled="{Binding IsEnableMakeCard}" 
+                FontSize="20"
+                FontWeight="Bold"
                 Background="{Binding TextColor}"
                 Grid.Row="3" 
                 Height="auto" 
