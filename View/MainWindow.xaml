@@ -591,6 +591,8 @@
                     ItemsSource="{Binding Menu}"
                     SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button 
+                    Margin="10,0,0,0"
+                    BorderThickness="0px"
                     FontWeight="Bold"
                     MinHeight="30px"
                     Grid.Row="1"
