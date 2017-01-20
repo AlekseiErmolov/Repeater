@@ -82,7 +82,7 @@ namespace Repeater.Classes.Helpers
         /// <returns></returns>
         public List<string> LoadLessonsName()
         {
-            var directory = Constants.DIRECTORY;
+            var directory = Constants.Directory;
 
             if (Directory.Exists(directory))
             {

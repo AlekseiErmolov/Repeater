@@ -574,7 +574,8 @@
         </Grid>
 
         <Grid Background="{Binding MenuColor}" Grid.Row="1" Grid.Column="0">
-            <ListBox 
+            <StackPanel Orientation="Vertical">
+                <ListBox 
                 DataContext="{Binding Menu}"
                 Margin="2,2,7,7"
                 Background="{x:Null}"
@@ -583,6 +584,12 @@
                 ItemContainerStyle="{DynamicResource MetroListBoxItemStyle}"
                 ItemsSource="{Binding Menu}"
                 SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"/>
+                <Button 
+                    Background="{Binding MenuColor}" 
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding AddHardLesson}"
+                    >Add</Button>
+            </StackPanel>
         </Grid>
 
         <Grid 

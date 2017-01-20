@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Practices.Unity;
@@ -53,6 +54,14 @@ namespace Repeater.ViewModel
             IsRepeat = false;
 
             _model.LessonsNames = _repository.LoadLessonsName();
+
+            //Создадим стандартный урок
+            if (!_model.LessonsNames.Any(x => x.Equals(Constants.DefaultLessonName)))
+            {
+                _repository.CreateNewLesson(Constants.DefaultLessonName);
+                _model.LessonsNames = _repository.LoadLessonsName();
+            }
+
             ViewLessonInfo = new RelayCommand(OpenInfoWindow);
         }
 
@@ -490,6 +499,17 @@ namespace Repeater.ViewModel
         #region Commands
 
         /// <summary>
+        ///     Команда добавления сложного урока в карточку
+        /// </summary>
+        private ICommand _addHardLesson;
+
+        public ICommand AddHardLesson
+        {
+            get { return _addHardLesson ?? (_addHardLesson = new RelayCommand(AddHardLessonCommandHandler)); }
+            set { _addHardLesson = value; }
+        }
+
+        /// <summary>
         /// </summary>
         private ICommand _repeatCommand;
 
@@ -506,6 +526,23 @@ namespace Repeater.ViewModel
         private void RepeatCommandHandler(object obj)
         {
             Repeat();
+        }
+
+        /// <summary>
+        /// Команда добавления сложного урока в карточку
+        /// </summary>
+        /// <param name="obj"></param>
+        private void AddHardLessonCommandHandler(object obj)
+        {
+            var presentedCards = _repository.LoadLesson(Constants.DefaultLessonName);
+            if (
+                !presentedCards.Any(
+                    x =>
+                        x.ForeignTask.Equals(_displayedCard.ForeignTask) &&
+                        x.NativeTask.Equals(_displayedCard.NativeTask)))
+            {
+                _repository.SaveToLessonNewCard(Constants.DefaultLessonName, _displayedCard);
+            }
         }
 
 
