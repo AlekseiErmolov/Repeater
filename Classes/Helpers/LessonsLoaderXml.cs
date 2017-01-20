@@ -105,9 +105,8 @@ namespace Repeater.Classes.Helpers
         /// <param name="card"></param>
         public void SaveToLessonNewCard(string lessonName, ICard card)
         {
-            if (string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
+            if (card == null || string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
                 return;
-
 
             var path = Constants.GetLessonPath(lessonName);
 

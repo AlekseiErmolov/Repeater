@@ -574,22 +574,31 @@
         </Grid>
 
         <Grid Background="{Binding MenuColor}" Grid.Row="1" Grid.Column="0">
-            <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+            
                 <ListBox 
-                DataContext="{Binding Menu}"
-                Margin="2,2,7,7"
-                Background="{x:Null}"
-                BorderBrush="{x:Null}" 
-                ItemTemplate="{DynamicResource MetroListBoxItemTemplate}" 
-                ItemContainerStyle="{DynamicResource MetroListBoxItemStyle}"
-                ItemsSource="{Binding Menu}"
-                SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"/>
+                    Grid.Row="0"
+                    DataContext="{Binding Menu}"
+                    Margin="2,2,7,7"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}" 
+                    ItemTemplate="{DynamicResource MetroListBoxItemTemplate}" 
+                    ItemContainerStyle="{DynamicResource MetroListBoxItemStyle}"
+                    ItemsSource="{Binding Menu}"
+                    SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button 
+                    FontWeight="Bold"
+                    MinHeight="30px"
+                    Grid.Row="1"
                     Background="{Binding MenuColor}" 
                     HorizontalAlignment="Stretch"
                     Command="{Binding AddHardLesson}"
-                    >Add</Button>
-            </StackPanel>
+                    >Add to Hard</Button>
+            </Grid>
         </Grid>
 
         <Grid 
