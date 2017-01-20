@@ -61,6 +61,8 @@ namespace Repeater.ViewModel
                 _repository.CreateNewLesson(Constants.DefaultLessonName);
                 _model.LessonsNames = _repository.LoadLessonsName();
             }
+            _model.LessonsNames.Remove(Constants.DefaultLessonName);
+            _model.LessonsNames.Insert(0, Constants.DefaultLessonName);
 
             ViewLessonInfo = new RelayCommand(OpenInfoWindow);
         }
