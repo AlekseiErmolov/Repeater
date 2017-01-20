@@ -1,10 +1,9 @@
-﻿using Repeater.Interfaces;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
+using Repeater.Interfaces;
 
 namespace Repeater.Model
 {
-    class LessonModel : ILesson
+    internal class LessonModel : ILesson
     {
         public LessonModel()
         {
@@ -13,16 +12,19 @@ namespace Repeater.Model
         }
 
         /// <summary>
-        /// Список карточек текущего урока
+        ///     Список карточек текущего урока
         /// </summary>
         public List<ICard> Cards { get; set; }
 
 
         /// <summary>
-        /// Имена всех уроков
+        ///     Имена всех уроков
         /// </summary>
         public List<string> LessonsNames { get; set; }
 
+        /// <summary>
+        ///     Имя открытого урока
+        /// </summary>
         public string OpenedLessonName { get; set; }
     }
 }

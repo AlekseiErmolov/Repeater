@@ -1,37 +1,38 @@
-﻿using Microsoft.Practices.Unity;
-using Repeater.Classes;
-using Repeater.Classes.TranslateFacade;
-using Repeater.Interfaces;
-using Repeater.Model;
-using Repeater.Services;
-using Repeater.View;
-using System;
+﻿using System;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Practices.Unity;
+using Repeater.Classes;
+using Repeater.Classes.Themes;
+using Repeater.Interfaces;
+using Repeater.Model;
+using Repeater.Properties;
+using Repeater.Services;
+using Repeater.View;
 
 namespace Repeater.ViewModel
 {
-    class MainWindowViewModel : ViewModelBase
+    internal class MainWindowViewModel : ViewModelBase
     {
         #region Variables
+
         private readonly ILesson _model;
         private readonly IRepository _repository;
         private readonly IRandomize _cardsService;
 
-        readonly IUnityContainer _container;
+        private readonly IUnityContainer _container;
 
         private ICommand _enterCommand;
         private EnterState _enterState;
         private ICard _displayedCard;
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Конструктор ViewModel главного окна
+        ///     Конструктор ViewModel главного окна
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="repository"></param>
         public MainWindowViewModel(IUnityContainer container)
         {
             _model = container.Resolve<ILesson>();
@@ -41,7 +42,7 @@ namespace Repeater.ViewModel
             _cardsService = new CardsService();
             _menu = new MetroMenu();
             _menu.MenuSelectEvent += _menu_MenuSelectEvent;
-            _IsEnableToEnterFileName = false;
+            _isEnableToEnterFileName = false;
             NotifyPropertyChanged("IsEnableToEnterFileName");
 
             LoadTheme();
@@ -56,13 +57,13 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Событие выбора урока
+        ///     Событие выбора урока
         /// </summary>
         /// <param name="name"></param>
         private void _menu_MenuSelectEvent(string name)
         {
             ClearCard();
-            
+
             OpenSelectedLesson(name);
             _model.OpenedLessonName = name;
             OpenedLesson = name;
@@ -76,12 +77,10 @@ namespace Repeater.ViewModel
         public RelayCommand ViewLessonInfo { get; set; }
 
         private string _newLessonName;
+
         public string NewLessonName
         {
-            get
-            {
-                return _newLessonName;
-            }
+            get { return _newLessonName; }
 
             set
             {
@@ -90,30 +89,25 @@ namespace Repeater.ViewModel
             }
         }
 
-        private bool _IsRepeat;
+        private bool _isRepeat;
+
         public bool IsRepeat
         {
-            get
-            {
-                return _IsRepeat;
-            }
+            get { return _isRepeat; }
             set
             {
-                _IsRepeat = value;
+                _isRepeat = value;
                 NotifyPropertyChanged("IsRepeat");
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         private ITheme _theme;
+
         public ITheme Theme
         {
-            get
-            {
-                return _theme;
-            }
+            get { return _theme; }
             set
             {
                 _theme = value;
@@ -126,104 +120,78 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string TitleColor
         {
-            get
-            {
-                return Theme.TitleColor;
-            }
+            get { return Theme.TitleColor; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string TextColor
         {
-            get
-            {
-                return Theme.TextColor;
-            }
+            get { return Theme.TextColor; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string MenuColor
         {
-            get
-            {
-                return Theme.MenuColor;
-            }
+            get { return Theme.MenuColor; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string ProgressColor
         {
-            get
-            {
-                return Theme.ProgressColor;
-            }
+            get { return Theme.ProgressColor; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string ProgressStatusColor
         {
-            get
-            {
-                return Theme.ProgressStatusColor;
-            }
+            get { return Theme.ProgressStatusColor; }
         }
 
         /// <summary>
-        /// Флаг разрешения добавления новой карточки
+        ///     Флаг разрешения добавления новой карточки
         /// </summary>
-        private bool _IsEnableMakeCard = false;
+        private bool _isEnableMakeCard;
+
         public bool IsEnableMakeCard
         {
-            get
-            {
-                return _IsEnableMakeCard;
-            }
+            get { return _isEnableMakeCard; }
             set
             {
-                _IsEnableMakeCard = value;
+                _isEnableMakeCard = value;
                 NotifyPropertyChanged("IsEnableMakeCard");
             }
         }
 
         /// <summary>
-        /// Разрешено ли вводить имя нового урока
+        ///     Разрешено ли вводить имя нового урока
         /// </summary>
-        private bool _IsEnableToEnterFileName;
+        private bool _isEnableToEnterFileName;
+
         public bool IsEnableToEnterFileName
         {
-            get
-            {
-                return _IsEnableToEnterFileName;
-            }
+            get { return _isEnableToEnterFileName; }
             set
             {
-                _IsEnableToEnterFileName = value;
+                _isEnableToEnterFileName = value;
                 NotifyPropertyChanged("IsEnableToEnterFileName");
             }
         }
 
         /// <summary>
-        /// Количество пройденных карточек в уроке
+        ///     Количество пройденных карточек в уроке
         /// </summary>
         private int _correctAnswerCnt;
+
         public int CorrectAnswerCnt
         {
-            get
-            {
-                return _correctAnswerCnt;
-            }
+            get { return _correctAnswerCnt; }
 
             set
             {
@@ -233,22 +201,21 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Меню уроков
+        ///     Меню уроков
         /// </summary>
         private MetroMenu _menu;
+
         public MetroMenu Menu
         {
             get
             {
                 _menu.Clear();
                 if (_model.LessonsNames != null)
-                {
                     foreach (var lesson in _model.LessonsNames)
                     {
                         if (string.IsNullOrEmpty(lesson)) continue;
                         _menu.Add(lesson.Length <= 15 ? lesson : lesson.Substring(0, 15));
                     }
-                }
                 return _menu;
             }
 
@@ -260,15 +227,13 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Количество неправильных ответов
+        ///     Количество неправильных ответов
         /// </summary>
         private int _incorrectAnswerCnt;
+
         public int IncorrectAnswerCnt
         {
-            get
-            {
-                return _incorrectAnswerCnt;
-            }
+            get { return _incorrectAnswerCnt; }
             set
             {
                 _incorrectAnswerCnt = value;
@@ -277,15 +242,13 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Цвет пользовательского ответа
+        ///     Цвет пользовательского ответа
         /// </summary>
         private Brush _foregroundColor = Brushes.Black;
+
         public Brush Forecolor
         {
-            get
-            {
-                return _foregroundColor;
-            }
+            get { return _foregroundColor; }
 
             set
             {
@@ -295,15 +258,13 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Введенный ответ от пользователя
+        ///     Введенный ответ от пользователя
         /// </summary>
         private string _userText;
+
         public string UserText
         {
-            get
-            {
-                return _userText;
-            }
+            get { return _userText; }
 
             set
             {
@@ -313,23 +274,19 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Поле задания на родном
+        ///     Поле задания на родном
         /// </summary>
         public string NativeTask
         {
             get
             {
                 if (_displayedCard == null)
-                    return String.Empty;
+                    return string.Empty;
 
                 if (_invertTask != true)
-                {
                     if (!IsEnableMakeCard)
-                    {
                         if (_enterState == EnterState.First)
-                            return String.Empty;
-                    }
-                }
+                            return string.Empty;
 
                 return _displayedCard.NativeTask;
             }
@@ -345,23 +302,19 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Поле задания на иностранном
+        ///     Поле задания на иностранном
         /// </summary>
         public string ForeignTask
         {
             get
             {
                 if (_displayedCard == null)
-                    return String.Empty;
+                    return string.Empty;
 
-                if (_invertTask == true)
-                {
+                if (_invertTask)
                     if (!IsEnableMakeCard)
-                    {
                         if (_enterState == EnterState.First)
-                            return String.Empty;
-                    }
-                }
+                            return string.Empty;
 
                 return _displayedCard.ForeignTask;
             }
@@ -377,20 +330,18 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Поле комментария
+        ///     Поле комментария
         /// </summary>
         public string Comment
         {
             get
             {
                 if (_displayedCard == null)
-                    return String.Empty;
+                    return string.Empty;
 
                 if (!IsEnableMakeCard)
-                {
                     if (_enterState == EnterState.First)
-                        return String.Empty;
-                }
+                        return string.Empty;
 
                 return _displayedCard.Comment;
             }
@@ -406,21 +357,22 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Флаг инверсии заданий
+        ///     Флаг инверсии заданий
         /// </summary>
         private bool _invertTask;
+
         public bool InvertTask
         {
             get
             {
                 try
                 {
-                    _invertTask = Properties.Settings.Default.Invert;
+                    _invertTask = Settings.Default.Invert;
                 }
                 catch
                 {
-                    Properties.Settings.Default.Invert = false;
-                    Properties.Settings.Default.Save();
+                    Settings.Default.Invert = false;
+                    Settings.Default.Save();
                     _invertTask = false;
                 }
 
@@ -430,22 +382,20 @@ namespace Repeater.ViewModel
             set
             {
                 _invertTask = value;
-                Properties.Settings.Default.Invert = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.Invert = value;
+                Settings.Default.Save();
                 NotifyPropertyChanged("InvertTask");
             }
         }
 
         /// <summary>
-        /// Количество карточек в уроке
+        ///     Количество карточек в уроке
         /// </summary>
         private int _cardsCount;
+
         public int CardsCount
         {
-            get
-            {
-                return _cardsCount;
-            }
+            get { return _cardsCount; }
             set
             {
                 _cardsCount = value;
@@ -455,25 +405,17 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string CardsCountString
         {
-            get
-            {
-                return CardsCount.ToString();
-            }
+            get { return CardsCount.ToString(); }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string OpenedLesson
         {
-            get
-            {
-                return _model.OpenedLessonName;
-            }
+            get { return _model.OpenedLessonName; }
 
             set
             {
@@ -487,78 +429,60 @@ namespace Repeater.ViewModel
         #region ThemesCommands
 
         /// <summary>
-        /// 
         /// </summary>
-        private ICommand _CyanThemeCommand;
+        private ICommand _cyanThemeCommand;
+
         public ICommand CyanThemeCommand
         {
-            get { return _CyanThemeCommand ?? (_CyanThemeCommand = new RelayCommand(CyanThemeCommandHandler)); }
-            set
-            {
-                _CyanThemeCommand = value;
-            }
+            get { return _cyanThemeCommand ?? (_cyanThemeCommand = new RelayCommand(CyanThemeCommandHandler)); }
+            set { _cyanThemeCommand = value; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="obj"></param>
         private void CyanThemeCommandHandler(object obj)
         {
             Theme = new ThemeCyan();
-            Properties.Settings.Default.Theme = "Cyan";
-            Properties.Settings.Default.Save();
+            Settings.Default.Theme = "Cyan";
+            Settings.Default.Save();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private ICommand _GreenThemeCommand;
+        private ICommand _greenThemeCommand;
+
         public ICommand GreenThemeCommand
         {
-            get
-            {
-                return _GreenThemeCommand ?? (_GreenThemeCommand = new RelayCommand(GreenThemeCommandHandler));
-            }
-            private set
-            {
-                _GreenThemeCommand = value;
-            }
+            get { return _greenThemeCommand ?? (_greenThemeCommand = new RelayCommand(GreenThemeCommandHandler)); }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="obj"></param>
         private void GreenThemeCommandHandler(object obj)
         {
             Theme = new ThemeGreen();
-            Properties.Settings.Default.Theme = "Green";
-            Properties.Settings.Default.Save();
+            Settings.Default.Theme = "Green";
+            Settings.Default.Save();
         }
 
         /// <summary>
-        /// 
         /// </summary>
-        private ICommand _BlueThemeCommand;
+        private ICommand _blueThemeCommand;
+
         public ICommand BlueThemeCommand
         {
-            get { return _BlueThemeCommand ?? (_BlueThemeCommand = new RelayCommand(BlueThemeCommandHandler)); }
-            set
-            {
-                _BlueThemeCommand = value;
-            }
+            get { return _blueThemeCommand ?? (_blueThemeCommand = new RelayCommand(BlueThemeCommandHandler)); }
+            set { _blueThemeCommand = value; }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="obj"></param>
         private void BlueThemeCommandHandler(object obj)
         {
             Theme = new ThemeBlue();
-            Properties.Settings.Default.Theme = "Blue";
-            Properties.Settings.Default.Save();
+            Settings.Default.Theme = "Blue";
+            Settings.Default.Save();
         }
 
         #endregion
@@ -566,22 +490,17 @@ namespace Repeater.ViewModel
         #region Commands
 
         /// <summary>
-        /// 
         /// </summary>
-        private ICommand _RepeatCommand;
+        private ICommand _repeatCommand;
+
         public ICommand RepeatCommand
         {
-            get { return _RepeatCommand ?? (_RepeatCommand = new RelayCommand(RepeatCommandHandler)); }
-            set
-            {
-                _RepeatCommand = value;
-            }
+            get { return _repeatCommand ?? (_repeatCommand = new RelayCommand(RepeatCommandHandler)); }
+            set { _repeatCommand = value; }
         }
 
-        
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="obj"></param>
         private void RepeatCommandHandler(object obj)
@@ -591,20 +510,18 @@ namespace Repeater.ViewModel
 
 
         /// <summary>
-        /// Команда создания нового урока
+        ///     Команда создания нового урока
         /// </summary>
-        private ICommand _NewLessonCommand;
+        private ICommand _newLessonCommand;
+
         public ICommand NewLessonCommand
         {
-            get { return _NewLessonCommand ?? (_NewLessonCommand = new RelayCommand(NewLessonCommandHandler)); }
-            set
-            {
-                _NewLessonCommand = value;
-            }
+            get { return _newLessonCommand ?? (_newLessonCommand = new RelayCommand(NewLessonCommandHandler)); }
+            set { _newLessonCommand = value; }
         }
 
         /// <summary>
-        /// Событие создания нового урока
+        ///     Событие создания нового урока
         /// </summary>
         /// <param name="obj"></param>
         private void NewLessonCommandHandler(object obj)
@@ -613,25 +530,25 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// 
         /// </summary>
-        private ICommand _CreateNewLessonFileCommand;
+        private ICommand _createNewLessonFileCommand;
+
         public ICommand CreateNewLessonFileCommand
         {
             get
             {
-                return _CreateNewLessonFileCommand ??
-                       (_CreateNewLessonFileCommand = new RelayCommand(CreateNewLessonFileCommandHandler));
+                return _createNewLessonFileCommand ??
+                       (_createNewLessonFileCommand = new RelayCommand(CreateNewLessonFileCommandHandler));
             }
             set
             {
-                _CreateNewLessonFileCommand = value;
+                _createNewLessonFileCommand = value;
                 NotifyPropertyChanged("CreateNewLessonFileCommand");
             }
         }
 
         /// <summary>
-        /// Событие создания нового урока
+        ///     Событие создания нового урока
         /// </summary>
         /// <param name="obj"></param>
         private void CreateNewLessonFileCommandHandler(object obj)
@@ -644,23 +561,17 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Команда нажатия Enter на поле ответов
+        ///     Команда нажатия Enter на поле ответов
         /// </summary>
         public ICommand EnterCommand
         {
-            get
-            {
-                return _enterCommand ?? (_enterCommand = new RelayCommand(EnterCommandHandler));
-            }
+            get { return _enterCommand ?? (_enterCommand = new RelayCommand(EnterCommandHandler)); }
 
-            set
-            {
-                _enterCommand = value;
-            }
+            set { _enterCommand = value; }
         }
 
         /// <summary>
-        /// Обработчик нажатия Enter на поле с ответами
+        ///     Обработчик нажатия Enter на поле с ответами
         /// </summary>
         /// <param name="obj"></param>
         private void EnterCommandHandler(object obj)
@@ -670,13 +581,9 @@ namespace Repeater.ViewModel
                 case EnterState.First:
                     _enterState = EnterState.Second;
                     if (_cardsCount - _correctAnswerCnt - _incorrectAnswerCnt != 0)
-                    {
                         SpellChecking();
-                    }
                     else
-                    {
                         Repeat();
-                    }
                     break;
 
                 case EnterState.Second:
@@ -687,7 +594,7 @@ namespace Repeater.ViewModel
                     else
                     {
                         _displayedCard = _cardsService.GetCardReduceList(_model.Cards);
-                        UserText = String.Empty;
+                        UserText = string.Empty;
                         Forecolor = Brushes.Black;
                     }
                     _enterState = EnterState.First;
@@ -703,11 +610,11 @@ namespace Repeater.ViewModel
         #region Methods
 
         /// <summary>
-        /// Открытие нового урока по выбору пользователя
+        ///     Открытие нового урока по выбору пользователя
         /// </summary>
         private void OpenSelectedLesson(string name)
         {
-            if (!String.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 _model.Cards = _repository.LoadLesson(name);
                 CardsCount = _model.Cards.Count;
@@ -721,7 +628,7 @@ namespace Repeater.ViewModel
 
 
         /// <summary>
-        /// Получение новой карточки для отображения
+        ///     Получение новой карточки для отображения
         /// </summary>
         private void RefreshCard()
         {
@@ -733,12 +640,12 @@ namespace Repeater.ViewModel
 
 
         /// <summary>
-        /// Проверка правильности ввода ответа
+        ///     Проверка правильности ввода ответа
         /// </summary>
         private void SpellChecking()
         {
-            if (String.IsNullOrEmpty(UserText))
-                UserText = String.Empty;
+            if (string.IsNullOrEmpty(UserText))
+                UserText = string.Empty;
 
             if (_invertTask)
             {
@@ -769,14 +676,13 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// 
         /// </summary>
         private void ClearCard()
         {
-            ForeignTask = String.Empty;
-            NativeTask = String.Empty;
-            Comment = String.Empty;
-            UserText = String.Empty;
+            ForeignTask = string.Empty;
+            NativeTask = string.Empty;
+            Comment = string.Empty;
+            UserText = string.Empty;
             _enterState = EnterState.First;
             Forecolor = Brushes.Black;
 
@@ -785,12 +691,12 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Загрузка темы
+        ///     Загрузка темы
         /// </summary>
         private void LoadTheme()
         {
-            var theme = Properties.Settings.Default.Theme;
-            switch (@theme)
+            var theme = Settings.Default.Theme;
+            switch (theme)
             {
                 case "Cyan":
                     Theme = new ThemeCyan();
@@ -815,11 +721,11 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Повтор выбранного урока
+        ///     Повтор выбранного урока
         /// </summary>
         private void Repeat()
         {
-            if (!String.IsNullOrEmpty(OpenedLesson))
+            if (!string.IsNullOrEmpty(OpenedLesson))
             {
                 ClearCard();
                 OpenSelectedLesson(OpenedLesson);
@@ -828,7 +734,7 @@ namespace Repeater.ViewModel
         }
 
 
-        void OpenInfoWindow(object parameter)
+        private void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
             var win = new LessonInfo(new ViewModelInfoWindow(_model, _container));

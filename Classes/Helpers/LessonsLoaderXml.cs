@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Serialization;
-
-using Repeater.Classes.Entities;
-using Repeater.Interfaces;
-using Repeater.Model;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.Serialization;
+using Repeater.Classes.Entities;
+using Repeater.Interfaces;
 
-namespace Repeater.Classes
+namespace Repeater.Classes.Helpers
 {
-    class LessonsLoaderXml : IRepository
+    internal class LessonsLoaderXml : IRepository
     {
-
         private readonly ILoggerWrap _logger;
 
         public LessonsLoaderXml(ILoggerWrap logger)
@@ -23,7 +20,7 @@ namespace Repeater.Classes
 
 
         /// <summary>
-        /// Создает новый урок
+        ///     Создает новый урок
         /// </summary>
         /// <param name="lessonName"></param>
         public void CreateNewLesson(string lessonName)
@@ -48,7 +45,7 @@ namespace Repeater.Classes
 
 
         /// <summary>
-        /// Загружает урок
+        ///     Загружает урок
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -57,19 +54,19 @@ namespace Repeater.Classes
             var path = Constants.GetLessonsPath(id);
             if (File.Exists(path))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Cards));
+                var serializer = new XmlSerializer(typeof(Cards));
                 ICards cards = new Cards();
 
                 try
                 {
-                    using (StreamReader reader = new StreamReader(path))
+                    using (var reader = new StreamReader(path))
                     {
-                        cards = (Cards)serializer.Deserialize(reader);
+                        cards = (Cards) serializer.Deserialize(reader);
                     }
 
                     return cards.CardsCollection.ToList<ICard>();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.WriteError("Error with loading lesson: " + ex.Message);
                 }
@@ -80,7 +77,7 @@ namespace Repeater.Classes
 
 
         /// <summary>
-        /// Загружает имя уроков в директории
+        ///     Загружает имя уроков в директории
         /// </summary>
         /// <returns></returns>
         public List<string> LoadLessonsName()
@@ -91,10 +88,8 @@ namespace Repeater.Classes
             {
                 var filesPaths = Directory.GetFiles(directory, "*.xml");
                 var lessonsNames = filesPaths.ToList();
-                for (int i = 0; i < lessonsNames.Count; i++)
-                {
+                for (var i = 0; i < lessonsNames.Count; i++)
                     lessonsNames[i] = lessonsNames[i].Replace(directory, "").Replace(".xml", "").Replace("\\", "");
-                }
 
                 return lessonsNames;
             }
@@ -104,7 +99,7 @@ namespace Repeater.Classes
 
 
         /// <summary>
-        /// Записывает новую карточку в файл урока
+        ///     Записывает новую карточку в файл урока
         /// </summary>
         /// <param name="lessonName"></param>
         /// <param name="card"></param>
@@ -130,24 +125,25 @@ namespace Repeater.Classes
 
                     cards.Add(xElem);
                     xdoc.Save(path);
-                    _logger.WriteInfo(string.Format("The card has been saved. To: {0} Card: {1}", lessonName, card.ForeignTask));
+                    _logger.WriteInfo(string.Format("The card has been saved. To: {0} Card: {1}", lessonName,
+                        card.ForeignTask));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.WriteError("Error with saving card: " + ex.Message);
             }
         }
 
         /// <summary>
-        /// Пересохраняет урок с новым набором карточек
+        ///     Пересохраняет урок с новым набором карточек
         /// </summary>
         /// <param name="lessonName"></param>
         /// <param name="cards"></param>
         public void ResaveLesson(string lessonName, List<ICard> cards)
         {
             //Remove empty cards
-            List<ICard> validCard = new List<ICard>();
+            var validCard = new List<ICard>();
             foreach (var card in cards)
             {
                 if (string.IsNullOrEmpty(card.ForeignTask) || string.IsNullOrEmpty(card.NativeTask))
@@ -179,33 +175,34 @@ namespace Repeater.Classes
                 xdoc.Save(path);
                 _logger.WriteInfo(string.Format("All cards has been saved. To: {0}", lessonName));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.WriteError("Error with saving card: " + ex.Message);
             }
-        }            
+        }
 
 
         /// <summary>
-        /// Удаляет заданную карту
+        ///     Удаляет заданную карту
         /// </summary>
         /// <param name="lessonName"></param>
         /// <param name="card"></param>
         public void DeleteCard(string lessonName, ICard card)
         {
-            string path = Constants.GetLessonPath(lessonName);
+            var path = Constants.GetLessonPath(lessonName);
 
             try
             {
                 var xdoc = XDocument.Load(path);
                 xdoc.Descendants("CardsCollection").Descendants("Card")
                     .First(x => x.Descendants("ForeignTask").First().Value.Equals(card.ForeignTask)
-                        && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
+                                && x.Descendants("NativeTask").First().Value.Equals(card.NativeTask))
                     .Remove();
                 xdoc.Save(path);
-                _logger.WriteInfo(string.Format("The card has been deleted. From: {0} Card: {1}",lessonName, card.ForeignTask));
+                _logger.WriteInfo(string.Format("The card has been deleted. From: {0} Card: {1}", lessonName,
+                    card.ForeignTask));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.WriteError("Error with deleting card: " + ex.Message);
             }

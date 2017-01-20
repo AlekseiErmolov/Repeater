@@ -5,6 +5,7 @@ using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;
 using System.Windows;
+using Repeater.Classes.Helpers;
 
 
 namespace Repeater

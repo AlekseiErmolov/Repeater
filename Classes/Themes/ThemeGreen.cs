@@ -1,20 +1,14 @@
 ﻿using Repeater.Interfaces;
 
-namespace Repeater.Classes
+namespace Repeater.Classes.Themes
 {
     public class ThemeGreen : ITheme
     {
-        public static string _TitleColor = "#81C784";
-        public static string _MenuColor = "#C8E6C9";
-        public static string _ProgressColor = "#66BB6A";
-        public static string _ProgressStatusColor = "#2E7D32";
-        public static string _TextColor = "#E8F5E9";
-
         public string TitleColor
         {
             get
             {
-                return _TitleColor;
+                return "#81C784";
             }
         }
 
@@ -22,7 +16,7 @@ namespace Repeater.Classes
         {
             get
             {
-                return _MenuColor;
+                return "#C8E6C9";
             }
         }
 
@@ -30,7 +24,7 @@ namespace Repeater.Classes
         {
             get
             {
-                return _ProgressColor;
+                return "#66BB6A";
             }
         }
 
@@ -38,7 +32,7 @@ namespace Repeater.Classes
         {
             get
             {
-                return _ProgressStatusColor;
+                return "#2E7D32";
             }
         }
 
@@ -46,7 +40,7 @@ namespace Repeater.Classes
         {
             get
             {
-                return _TextColor;
+                return "#E8F5E9";
             }
         }
     }

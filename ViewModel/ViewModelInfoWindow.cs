@@ -1,36 +1,44 @@
-﻿using Repeater.Classes;
-using Repeater.Interfaces;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using System;
-using Repeater.Model;
-using Repeater.Classes.TranslateFacade;
 using Microsoft.Practices.Unity;
+using Repeater.Classes;
+using Repeater.Classes.TranslateFacade;
+using Repeater.Interfaces;
+using Repeater.Model;
 
 namespace Repeater.ViewModel
 {
     public class ViewModelInfoWindow : ViewModelBase
     {
-        IRepository _repository;
-        ITranslate _translateFacade;
-        string TranslateKey { get; set; }
+        private readonly IRepository _repository;
+        private readonly ITranslate _translateFacade;
 
-        #region Properties
-        public ILesson Lesson
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="container"></param>
+        public ViewModelInfoWindow(ILesson model, IUnityContainer container)
         {
-            get;
-            set;
+            Lesson = model;
+            _repository = container.Resolve<IRepository>();
+            _translateFacade = container.Resolve<ITranslate>();
         }
 
+        private string TranslateKey { get; set; }
+
+        #region Properties
+
+        public ILesson Lesson { get; set; }
+
         private ICard _selectedCard;
+
         public ICard SelectedCard
         {
-            get
-            {
-                return _selectedCard;
-            }
+            get { return _selectedCard; }
 
             set
             {
@@ -52,42 +60,26 @@ namespace Repeater.ViewModel
                 return null;
             }
 
-            set
-            {
-                Lesson.Cards = value.ToList();
-            }
+            set { Lesson.Cards = value.ToList(); }
         }
+
         #endregion
-
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="model"></param>
-        public ViewModelInfoWindow(ILesson model, IUnityContainer container)
-        {
-            Lesson = model;
-            _repository = container.Resolve<IRepository>();
-            _translateFacade = container.Resolve<ITranslate>();
-        }
 
         #region Commands
 
         /// <summary>
-        /// Add new card to collection
+        ///     Add new card to collection
         /// </summary>
         private ICommand _newCard;
+
         public ICommand NewCard
         {
             get { return _newCard ?? (_newCard = new RelayCommand(NewCardHandler)); }
-            set
-            {
-                _newCard = value;
-            }
+            set { _newCard = value; }
         }
 
         /// <summary>
-        /// New card handler
+        ///     New card handler
         /// </summary>
         /// <param name="obj"></param>
         private void NewCardHandler(object obj)
@@ -101,21 +93,19 @@ namespace Repeater.ViewModel
 
 
         /// <summary>
-        /// Remove selected card from collection
+        ///     Remove selected card from collection
         /// </summary>
         private ICommand _removeCard;
+
         public ICommand RemoveCard
         {
             get { return _removeCard ?? (_removeCard = new RelayCommand(RemoveCardHandler)); }
-            set
-            {
-                _removeCard = value;
-            }
+            set { _removeCard = value; }
         }
 
 
         /// <summary>
-        /// Remove card handler
+        ///     Remove card handler
         /// </summary>
         /// <param name="obj"></param>
         private void RemoveCardHandler(object obj)
@@ -128,45 +118,39 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Save cards to repo
+        ///     Save cards to repo
         /// </summary>
         private ICommand _autoTranslate;
+
         public ICommand AutoTranslate
         {
             get { return _autoTranslate ?? (_autoTranslate = new RelayCommand(AutoTranslateHandler)); }
-            set
-            {
-                _autoTranslate = value;
-            }
+            set { _autoTranslate = value; }
         }
 
         /// <summary>
-        /// Save cards to repo
+        ///     Save cards to repo
         /// </summary>
         private ICommand _saveCards;
+
         public ICommand SaveCards
         {
             get { return _saveCards ?? (_saveCards = new RelayCommand(SaveCardHandler)); }
-            set
-            {
-                _saveCards = value;
-            }
+            set { _saveCards = value; }
         }
 
         /// <summary>
-        /// Save cards handler
+        ///     Save cards handler
         /// </summary>
         /// <param name="obj"></param>
         private void SaveCardHandler(object obj)
         {
             if (Lesson.Cards != null)
-            {
                 _repository.ResaveLesson(Lesson.OpenedLessonName, Lesson.Cards);
-            }
         }
 
         /// <summary>
-        /// Save cards handler
+        ///     Save cards handler
         /// </summary>
         /// <param name="obj"></param>
         private void AutoTranslateHandler(object obj)
@@ -179,7 +163,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Translate completion event - get the result
+        ///     Translate completion event - get the result
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

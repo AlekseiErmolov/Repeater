@@ -5,10 +5,10 @@ using Repeater.Interfaces;
 
 namespace Repeater.Services
 {
-    class CardsService : IRandomize
+    internal class CardsService : IRandomize
     {
-        readonly Random _rnd;
-        
+        private readonly Random _rnd;
+
         public CardsService()
         {
             _rnd = new Random();
@@ -16,7 +16,7 @@ namespace Repeater.Services
 
 
         /// <summary>
-        /// Получение следующей карточки и удаление ее из списка
+        ///     Получение следующей карточки и удаление ее из списка
         /// </summary>
         /// <param name="lesson"></param>
         /// <returns></returns>

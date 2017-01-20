@@ -1,53 +1,32 @@
 ﻿using Repeater.Interfaces;
 
-namespace Repeater.Classes
+namespace Repeater.Classes.Themes
 {
     public class ThemeBlue : ITheme
     {
-        public static string _TitleColor = "#64B5F6";
-        public static string _MenuColor = "#BBDEFB";
-        public static string _ProgressColor = "#BBDEFB";
-        public static string _ProgressStatusColor = "#1565C0";
-        public static string _TextColor = "#E3F2FD";
-
         public string TitleColor
         {
-            get
-            {
-                return _TitleColor;
-            }
+            get { return "#64B5F6"; }
         }
 
         public string MenuColor
         {
-            get
-            {
-                return _MenuColor;
-            }
+            get { return "#BBDEFB"; }
         }
 
         public string ProgressColor
         {
-            get
-            {
-                return _ProgressColor;
-            }
+            get { return "#BBDEFB"; }
         }
 
         public string ProgressStatusColor
         {
-            get
-            {
-                return _ProgressStatusColor;
-            }
+            get { return "#1565C0"; }
         }
 
         public string TextColor
         {
-            get
-            {
-                return _TextColor;
-            }
+            get { return "#E3F2FD"; }
         }
     }
 }
