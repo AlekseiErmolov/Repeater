@@ -459,6 +459,13 @@ namespace Repeater.ViewModel
             Settings.Default.Save();
         }
 
+        private ICommand _grayThemeCommand;
+
+        public ICommand GrayThemeCommand
+        {
+            get { return _grayThemeCommand ?? (_grayThemeCommand = new RelayCommand(GrayThemeCommandCommandHandler)); }
+        }
+
         private ICommand _greenThemeCommand;
 
         public ICommand GreenThemeCommand
@@ -473,6 +480,16 @@ namespace Repeater.ViewModel
         {
             Theme = new ThemeGreen();
             Settings.Default.Theme = "Green";
+            Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj"></param>
+        private void GrayThemeCommandCommandHandler(object obj)
+        {
+            Theme = new ThemeBlueGrey();
+            Settings.Default.Theme = "Gray";
             Settings.Default.Save();
         }
 

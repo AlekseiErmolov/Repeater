@@ -486,7 +486,7 @@
                             <SolidColorBrush Color="Gray"/>
                         </Rectangle.Fill>
                         <Rectangle.InputBindings>
-                            <MouseBinding Command="{Binding GreyBlueThemeCommand}" Gesture="LeftClick"/>
+                            <MouseBinding Command="{Binding GrayThemeCommand}" Gesture="LeftClick"/>
                         </Rectangle.InputBindings>
                     </Rectangle>
                 </StackPanel>
