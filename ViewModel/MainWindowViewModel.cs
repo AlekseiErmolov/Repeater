@@ -554,8 +554,8 @@ namespace Repeater.ViewModel
         private void AddHardLessonCommandHandler(object obj)
         {
             var presentedCards = _repository.LoadLesson(Constants.DefaultLessonName);
-            if (
-                !presentedCards.Any(
+            if (_displayedCard != null
+                && !presentedCards.Any(
                     x =>
                         x.ForeignTask.Equals(_displayedCard.ForeignTask) &&
                         x.NativeTask.Equals(_displayedCard.NativeTask)))
