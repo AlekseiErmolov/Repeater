@@ -644,7 +644,7 @@
             <TextBox
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
-                IsReadOnly="{Binding IsEnableMakeCard}" 
+                IsEnabled="{Binding IsEnableMakeCard}" 
                 FontSize="20"
                 FontWeight="Bold"
                 Background="{Binding TextColor}"
@@ -660,7 +660,7 @@
             <TextBox
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
-                IsReadOnly="{Binding IsEnableMakeCard}"
+                IsEnabled="{Binding IsEnableMakeCard}"
                 FontFamily="Segoe UI Light" FontSize="20"
                 Background="{Binding TextColor}"
                 Grid.Row="1" 
@@ -693,7 +693,7 @@
             <TextBox 
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
-                IsReadOnly="{Binding IsEnableMakeCard}" 
+                IsEnabled="{Binding IsEnableMakeCard}" 
                 FontSize="20"
                 FontWeight="Bold"
                 Background="{Binding TextColor}"
