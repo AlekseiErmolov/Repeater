@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Practices.Unity;
 using Repeater.Classes;
 using Repeater.Classes.TranslateFacade;
@@ -12,9 +14,9 @@ namespace Repeater.ViewModel
 {
     public class ViewModelInfoWindow : ViewModelBase
     {
+        private readonly DispatcherTimer _dispatcherTimer;
         private readonly IRepository _repository;
         private readonly ITranslate _translateFacade;
-
 
         /// <summary>
         ///     Constructor
@@ -26,6 +28,10 @@ namespace Repeater.ViewModel
             Lesson = model;
             _repository = container.Resolve<IRepository>();
             _translateFacade = container.Resolve<ITranslate>();
+
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Tick += dispatcherTimer_Tick;
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
         }
 
         private string TranslateKey { get; set; }
@@ -61,6 +67,16 @@ namespace Repeater.ViewModel
             }
 
             set { Lesson.Cards = value.ToList(); }
+        }
+
+        private bool ClipboardModeEnabled { get; set; }
+
+        /// <summary>
+        ///     Clipboard Mode button text
+        /// </summary>
+        public string ClipboardMode
+        {
+            get { return ClipboardModeEnabled ? "Clipboard On" : "Clipboard Off"; }
         }
 
         #endregion
@@ -129,6 +145,17 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
+        ///     Clipboard mode Command
+        /// </summary>
+        private ICommand _clipboardMode;
+
+        public ICommand ClipboardCommand
+        {
+            get { return _clipboardMode ?? (_clipboardMode = new RelayCommand(ClipboardCommandHandler)); }
+            set { _clipboardMode = value; }
+        }
+
+        /// <summary>
         ///     Save cards to repo
         /// </summary>
         private ICommand _saveCards;
@@ -163,10 +190,47 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
+        ///     Autofill cards from clipboard
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ClipboardCommandHandler(object obj)
+        {
+            ClipboardModeEnabled = !ClipboardModeEnabled;
+            NotifyPropertyChanged("ClipboardMode");
+
+            if (ClipboardModeEnabled)
+                _dispatcherTimer.Start();
+            else
+                _dispatcherTimer.Stop();
+        }
+
+        /// <summary>
+        ///     DispatcherTimer event
+        /// </summary>
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText(TextDataFormat.Text))
+            {
+                var clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                if (!string.IsNullOrEmpty(clipboardText))
+                {
+                    if (!Lesson.Cards.Any(x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        Clipboard.SetText(string.Empty);
+
+                        Lesson.Cards.Add(new Card
+                        {
+                            ForeignTask = clipboardText
+                        });
+                        NotifyPropertyChanged("Cards");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         ///     Translate completion event - get the result
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void _translateFacade_GetTranslateResultEvent(object sender, EventArgs e)
         {
             var ev = e as TranslateEventArgs;
