@@ -198,6 +198,9 @@ namespace Repeater.ViewModel
             ClipboardModeEnabled = !ClipboardModeEnabled;
             NotifyPropertyChanged("ClipboardMode");
 
+            //Reset Clipboard as default
+            Clipboard.SetText(string.Empty);
+
             if (ClipboardModeEnabled)
                 _dispatcherTimer.Start();
             else
