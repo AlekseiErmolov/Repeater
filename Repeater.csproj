@@ -118,6 +118,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Entities\Cards.cs" />
     <Compile Include="Classes\Enums\EnterState.cs" />
+    <Compile Include="Classes\Helpers\BindingProxy.cs" />
     <Compile Include="Classes\Helpers\CommonHelpers.cs" />
     <Compile Include="Classes\Helpers\RelayCommand.cs" />
     <Compile Include="Classes\Helpers\LessonsLoaderXml.cs" />

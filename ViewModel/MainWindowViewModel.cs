@@ -65,6 +65,7 @@ namespace Repeater.ViewModel
             _model.LessonsNames.Insert(0, Constants.DefaultLessonName);
 
             ViewLessonInfo = new RelayCommand(OpenInfoWindow);
+            IsEditableTitle = false;
         }
 
         /// <summary>
@@ -111,6 +112,10 @@ namespace Repeater.ViewModel
                 NotifyPropertyChanged("IsRepeat");
             }
         }
+
+
+        public bool IsEditableTitle { get; set; }
+
 
         /// <summary>
         /// </summary>
@@ -517,6 +522,13 @@ namespace Repeater.ViewModel
 
         #region Commands
 
+        private ICommand _renameLesson;
+        public ICommand RenameLessonCommand
+        {
+            get { return _renameLesson ?? (_renameLesson = new RelayCommand(RenameLessonCommandHandler)); }
+            set { _renameLesson = value; }
+        }
+
         /// <summary>
         ///     Команда добавления сложного урока в карточку
         /// </summary>
@@ -550,7 +562,6 @@ namespace Repeater.ViewModel
         /// <summary>
         /// Команда добавления сложного урока в карточку
         /// </summary>
-        /// <param name="obj"></param>
         private void AddHardLessonCommandHandler(object obj)
         {
             var presentedCards = _repository.LoadLesson(Constants.DefaultLessonName);
@@ -564,6 +575,15 @@ namespace Repeater.ViewModel
             }
         }
 
+        /// <summary>
+        /// Контекстное меню - переименовать урок
+        /// </summary>
+        private void RenameLessonCommandHandler(object obj)
+        {
+            IsEditableTitle = !IsEditableTitle;
+
+            Menu.Menu.ElementAt(2).IsEditableTitle = IsEditableTitle;
+        }
 
         /// <summary>
         ///     Команда создания нового урока

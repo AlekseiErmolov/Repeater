@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Repeater"
         xmlns:vm="clr-namespace:Repeater.ViewModel"
+        xmlns:helpers="clr-namespace:Repeater.Classes.Helpers"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Title="Repeater" Height="450" Width="650" Style="{DynamicResource MetroWindowStyle}">
@@ -17,11 +18,19 @@
                     <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
+                
                 <Path Data="{Binding Image}" Stretch="Uniform" Width="28" Height="28" 
                     Fill="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" />
                 <StackPanel Grid.Column="1" Margin="5">
-                    <TextBlock Text="{Binding Path=Title, FallbackValue=Title}" FontFamily="Segoe UI Light" FontSize="20" 
-                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" />
+                    <TextBox 
+                        Text="{Binding Path=Title, FallbackValue=Title}" 
+                        FontFamily="Segoe UI Light" 
+                        FontSize="20" 
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        IsEnabled="{Binding IsEditableTitle}"
+                        Background="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Background}"
+                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}, Path=Foreground}" />
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -579,7 +588,11 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-            
+
+                <Grid.Resources>
+                    <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
+                </Grid.Resources>
+
                 <ListBox 
                     Grid.Row="0"
                     DataContext="{Binding Menu}"
@@ -589,7 +602,13 @@
                     ItemTemplate="{DynamicResource MetroListBoxItemTemplate}" 
                     ItemContainerStyle="{DynamicResource MetroListBoxItemStyle}"
                     ItemsSource="{Binding Menu}"
-                    SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"/>
+                    SelectedItem="{Binding MenuSelected, Mode=TwoWay,NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Rename" Command="{Binding Source={StaticResource Proxy}, Path=Data.RenameLessonCommand}"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
                 <Button 
                     Margin="10,0,0,0"
                     BorderThickness="0px"

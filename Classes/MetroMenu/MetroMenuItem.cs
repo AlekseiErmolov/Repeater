@@ -8,10 +8,13 @@ namespace Repeater.Classes
 
         public Geometry Image { get; set; }
 
+        public bool IsEditableTitle { get; set; }
+
         public MetroMenuItem(string title, Geometry image)
         {
             Image = image;
             Title = title;
+            IsEditableTitle = false;
         }
     }
 }
