@@ -11,23 +11,22 @@ namespace Repeater.Classes.TranslateFacade
         /// <summary>
         ///     Конструктор
         /// </summary>
-        /// <param name="engine"></param>
         public TranslateFacade(IUnityContainer container)
         {
-            _TranslateEngine = container.Resolve<ITranslateEngine>();
+            TranslateEngine = container.Resolve<ITranslateEngine>();
             ConfigureBackgroundWorker();
         }
 
-        private BackgroundWorker _bw { get; set; }
+        private BackgroundWorker BackWorker { get; set; }
 
-        private List<ICard> _taskList { get; set; }
+        private List<ICard> TaskList { get; set; }
 
         private string SecretKey { get; set; }
 
         /// <summary>
         ///     Движок перевода
         /// </summary>
-        private ITranslateEngine _TranslateEngine { get; }
+        private ITranslateEngine TranslateEngine { get; }
 
         /// <summary>
         ///     Основное событие завершения перевода
@@ -37,31 +36,26 @@ namespace Repeater.Classes.TranslateFacade
         /// <summary>
         ///     Делает перевод текста
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public void Translate(string key, List<ICard> text)
         {
-            _taskList = text;
+            TaskList = text;
 
-            if (_bw.IsBusy != true)
-                _bw.RunWorkerAsync(key);
+            if (BackWorker.IsBusy != true)
+                BackWorker.RunWorkerAsync(key);
         }
 
         /// <summary>
         ///     Возвращает ключ
         /// </summary>
-        /// <returns></returns>
         public string GetKey()
         {
-            var result = _TranslateEngine.GetKey();
+            var result = TranslateEngine.GetKey();
             return result;
         }
 
         /// <summary>
         ///     Рабочий поток BackgroundWorker
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void _bw_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
@@ -75,12 +69,16 @@ namespace Repeater.Classes.TranslateFacade
             else
             {
                 // Perform a time consuming operation and report progress.
-                foreach (var card in _taskList)
+                foreach (var card in TaskList)
                 {
                     if (string.IsNullOrEmpty(card.ForeignTask))
-                        card.ForeignTask = _TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
+                        card.ForeignTask = TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en")
+                            .Trim()
+                            .ToLowerInvariant();
                     else if (string.IsNullOrEmpty(card.NativeTask))
-                        card.NativeTask = _TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
+                        card.NativeTask = TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru")
+                            .Trim()
+                            .ToLowerInvariant();
                 }
             }
         }
@@ -102,20 +100,20 @@ namespace Repeater.Classes.TranslateFacade
         private void _bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (GetTranslateResultEvent != null)
-                GetTranslateResultEvent.Invoke(sender, new TranslateEventArgs { Cards = _taskList, Key = SecretKey });
+                GetTranslateResultEvent.Invoke(sender, new TranslateEventArgs { Cards = TaskList, Key = SecretKey });
         }
 
         /// <summary>
         /// </summary>
         private void ConfigureBackgroundWorker()
         {
-            _bw = new BackgroundWorker();
-            _bw.WorkerSupportsCancellation = true;
-            _bw.WorkerReportsProgress = true;
+            BackWorker = new BackgroundWorker();
+            BackWorker.WorkerSupportsCancellation = true;
+            BackWorker.WorkerReportsProgress = true;
 
-            _bw.DoWork += _bw_DoWork;
-            _bw.ProgressChanged += _bw_ProgressChanged;
-            _bw.RunWorkerCompleted += _bw_RunWorkerCompleted;
+            BackWorker.DoWork += _bw_DoWork;
+            BackWorker.ProgressChanged += _bw_ProgressChanged;
+            BackWorker.RunWorkerCompleted += _bw_RunWorkerCompleted;
         }
     }
 }
