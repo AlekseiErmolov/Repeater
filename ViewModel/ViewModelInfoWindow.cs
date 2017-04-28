@@ -217,7 +217,7 @@ namespace Repeater.ViewModel
                 var clipboardText = Clipboard.GetText(TextDataFormat.Text);
                 if (!string.IsNullOrEmpty(clipboardText))
                 {
-                    clipboardText = clipboardText.Trim();
+                    clipboardText = clipboardText.Trim().ToLowerInvariant();
                     if (!Lesson.Cards.Any(x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
                     {
                         Clipboard.SetText(string.Empty);
