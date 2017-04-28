@@ -31,7 +31,7 @@ namespace Repeater.ViewModel
 
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
         }
 
         private string TranslateKey { get; set; }
