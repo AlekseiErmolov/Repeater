@@ -1,11 +1,11 @@
-﻿using Repeater.Interfaces;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+using Repeater.Classes.TranslateFacade.Classes;
+using Repeater.Interfaces;
 
 namespace Repeater.Classes.TranslateFacade
 {
@@ -13,7 +13,7 @@ namespace Repeater.Classes.TranslateFacade
     {
         private const string strTranslatorAccessURI = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
 
-        ILoggerWrap _logger;
+        private readonly ILoggerWrap _logger;
 
         public TranslateEngine(ILoggerWrap logger)
         {
@@ -36,10 +36,10 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         public string TranslateText(string key, string txtToTranslate, string from, string to)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
-            WebRequestModel translateRequest = BuildTranslateRequest(key, txtToTranslate, from, to);
-            string response = GetResponse(translateRequest);
+            var translateRequest = BuildTranslateRequest(key, txtToTranslate, from, to);
+            var response = GetResponse(translateRequest);
 
             if (!string.IsNullOrEmpty(response))
             {
@@ -72,15 +72,16 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         private WebRequestModel BuildAuthentificateWebService()
         {
-            var clientID = "5a4baa75-86e3-4523-b2bc-3bfcda5023fa";
-            var clientSecret = "UnFTrIdP4RkbZBkJx5eTIJqP37yX0+maqhAsCzJ8cEk";
+            var clientID = "Repeater2016";
+            var clientSecret = "4ldwSHBcNftSnSNfgCu32Zi3XlFl02+q4TpocNCSaPE=";
 
-            string strRequestDetails =
-                string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&scope=http://api.microsofttranslator.com",
+            var strRequestDetails =
+                string.Format(
+                    "grant_type=client_credentials&client_id={0}&client_secret={1}&scope=http://api.microsofttranslator.com",
                     HttpUtility.UrlEncode(clientID),
                     HttpUtility.UrlEncode(clientSecret));
 
-            WebRequest webRequest = WebRequest.Create(strTranslatorAccessURI);
+            var webRequest = WebRequest.Create(strTranslatorAccessURI);
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.Method = "POST";
             var bytes = Encoding.ASCII.GetBytes(strRequestDetails);
@@ -103,12 +104,14 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         private WebRequestModel BuildTranslateRequest(string key, string txtToTranslate, string from, string to)
         {
-            string uri =
+            var uri =
                 "http://api.microsofttranslator.com/v2/Http.svc/Translate?text="
                 + HttpUtility.UrlEncode(txtToTranslate)
                 + string.Format("&from={0}&to={1}", from, to);
 
-            WebRequest translationWebRequest = WebRequest.Create(uri);
+            var translationWebRequest = WebRequest.Create(uri);
+            translationWebRequest.ContentType = "application/xml; charset=utf-8";
+
             translationWebRequest.Headers.Add("Authorization", key);
 
             var retval = new WebRequestModel
@@ -126,20 +129,20 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         private string GetAuthenticateHeader()
         {
-            WebRequestModel requestModel = BuildAuthentificateWebService();
+            var requestModel = BuildAuthentificateWebService();
 
             // Get the request stream.
-            using (Stream dataStream = requestModel.Request.GetRequestStream())
+            using (var dataStream = requestModel.Request.GetRequestStream())
             {
                 dataStream.Write(requestModel.ByteArray, 0, requestModel.ByteArray.Length);
                 dataStream.Close();
             }
 
-            string response = GetResponse(requestModel);
+            var response = GetResponse(requestModel);
             var token = JsonHelper.From<AdmAccessToken>(response);
-            string headerValue = "Bearer " + token.access_token;
+            var resultToken = "Bearer " + token.AccessToken;
 
-            return headerValue;
+            return resultToken;
         }
 
         /// <summary>
@@ -149,34 +152,30 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         private string GetResponse(WebRequestModel requestModel)
         {
-            string answer = string.Empty;
+            var answer = string.Empty;
 
             // Get the response.
             try
             {
-                using (WebResponse response = requestModel.Request.GetResponse())
+                using (var response = requestModel.Request.GetResponse())
                 {
-                    using (Stream dataStream = response.GetResponseStream())
+                    using (var dataStream = response.GetResponseStream())
                     {
                         using (var reader = new StreamReader(dataStream))
                         {
-                            string responseFromServer = reader.ReadToEnd();
+                            var responseFromServer = reader.ReadToEnd();
                             if (!string.IsNullOrEmpty(responseFromServer))
-                            {
                                 answer = responseFromServer;
-                            }
                         }
                     }
                 }
             }
             catch (WebException ex)
             {
-                string finalMessage = string.Empty;
+                var finalMessage = string.Empty;
                 var message = GetResponceMessage(ex.Response);
                 if (!string.IsNullOrEmpty(message))
-                {
                     finalMessage = "Response is:\r\n" + message;
-                }
                 _logger.WriteError(string.IsNullOrEmpty(finalMessage) ? ex.Message : finalMessage);
             }
 
@@ -185,7 +184,7 @@ namespace Repeater.Classes.TranslateFacade
 
         private string GetResponceMessage(WebResponse response)
         {
-            string message = string.Empty;
+            var message = string.Empty;
 
             if (response != null)
             {
@@ -206,12 +205,12 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         private static string ReadStreamFromResponse(WebResponse response)
         {
-            using (Stream responseStream = response.GetResponseStream())
+            using (var responseStream = response.GetResponseStream())
             {
                 using (var sr = new StreamReader(responseStream))
                 {
                     //Need to return this response 
-                    string strContent = sr.ReadToEnd();
+                    var strContent = sr.ReadToEnd();
                     if (!string.IsNullOrEmpty(strContent))
                     {
                         var xTranslation = new XmlDocument();

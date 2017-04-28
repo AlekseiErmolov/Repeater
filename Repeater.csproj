@@ -130,6 +130,7 @@
     <Compile Include="Classes\Themes\ThemeCyan.cs" />
     <Compile Include="Classes\Themes\ThemeGreen.cs" />
     <Compile Include="Classes\TranslateFacade\Classes\AdmAccessToken.cs" />
+    <Compile Include="Classes\TranslateFacade\Classes\AzureAuthToken.cs" />
     <Compile Include="Classes\TranslateFacade\Classes\TranslateEngine.cs" />
     <Compile Include="Classes\TranslateFacade\Classes\TranslateEventArgs.cs" />
     <Compile Include="Classes\TranslateFacade\Classes\TranslateFacade.cs" />

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Repeater.Interfaces;
 using Microsoft.Practices.Unity;
+using Repeater.Interfaces;
 
 namespace Repeater.Classes.TranslateFacade
 {
@@ -44,9 +44,7 @@ namespace Repeater.Classes.TranslateFacade
             _taskList = text;
 
             if (_bw.IsBusy != true)
-            {
                 _bw.RunWorkerAsync(key);
-            }
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace Repeater.Classes.TranslateFacade
         /// <returns></returns>
         public string GetKey()
         {
-            string result = _TranslateEngine.GetKey();
+            var result = _TranslateEngine.GetKey();
             return result;
         }
 
@@ -70,32 +68,19 @@ namespace Repeater.Classes.TranslateFacade
             SecretKey = e.Argument as string;
 
             if (string.IsNullOrEmpty(SecretKey))
-            {
                 SecretKey = GetKey();
-            }
 
-            if (!string.IsNullOrEmpty(SecretKey))
+            if (worker != null && worker.CancellationPending)
+                e.Cancel = true;
+            else
             {
-                if (worker.CancellationPending)
+                // Perform a time consuming operation and report progress.
+                foreach (var card in _taskList)
                 {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    // Perform a time consuming operation and report progress.
-                    foreach (ICard card in _taskList)
-                    {
-                        if (string.IsNullOrEmpty(card.ForeignTask))
-                        {
-                            card.ForeignTask = _TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
-                        }
-                        else if (string.IsNullOrEmpty(card.NativeTask))
-                        {
-                            card.NativeTask = _TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
-                        }
-                    }
-
-                    //worker.ReportProgress((i * 10));
+                    if (string.IsNullOrEmpty(card.ForeignTask))
+                        card.ForeignTask = _TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
+                    else if (string.IsNullOrEmpty(card.NativeTask))
+                        card.NativeTask = _TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
                 }
             }
         }
@@ -117,9 +102,7 @@ namespace Repeater.Classes.TranslateFacade
         private void _bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (GetTranslateResultEvent != null)
-            {
-                GetTranslateResultEvent.Invoke(sender, new TranslateEventArgs {Cards = _taskList, Key = SecretKey});
-            }
+                GetTranslateResultEvent.Invoke(sender, new TranslateEventArgs { Cards = _taskList, Key = SecretKey });
         }
 
         /// <summary>
