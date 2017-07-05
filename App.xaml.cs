@@ -1,17 +1,16 @@
-﻿using Microsoft.Practices.Unity;
-using Repeater.Classes;
+﻿using System.Windows;
+using Microsoft.Practices.Unity;
+using Repeater.Classes.Helpers;
+using Repeater.Classes.Logs;
 using Repeater.Classes.TranslateFacade;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;
-using System.Windows;
-using Repeater.Classes.Helpers;
-
 
 namespace Repeater
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
@@ -33,6 +32,5 @@ namespace Repeater
             };
             MainWindow.Show();
         }
-
     }
 }

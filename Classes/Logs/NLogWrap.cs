@@ -1,7 +1,7 @@
 ﻿using NLog;
 using Repeater.Interfaces;
 
-namespace Repeater.Classes
+namespace Repeater.Classes.Logs
 {
     public class NLogWrap : ILoggerWrap
     {
