@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
 using Repeater.Classes.TranslateFacade.Interfaces;
@@ -8,46 +9,47 @@ namespace Repeater.Classes.TranslateFacade.Classes
 {
     internal class TranslateFacade : ITranslate
     {
-        /// <summary>
-        ///     Конструктор
-        /// </summary>
-        public TranslateFacade(IUnityContainer container)
+        public TranslateFacade()
         {
-            TranslateEngine = container.Resolve<ITranslateEngine>();
         }
-
-        private List<ICard> TaskList { get; set; }
 
         private string SecretKey { get; set; }
 
         /// <summary>
         ///     Движок перевода
         /// </summary>
-        private ITranslateEngine TranslateEngine { get; }
+        public ITranslateEngine TranslateEngine { get; set; }
+
+        public ILoggerWrap Logger { get; set; }
 
         /// <summary>
         ///     Делает перевод текста
         /// </summary>
-        public async Task<bool> Translate(string key, List<ICard> text)
+        public async Task<bool> Translate(string key, List<ICard> cards)
         {
-            TaskList = text;
-
-            if (string.IsNullOrEmpty(SecretKey))
-                SecretKey = await GetKey();
-
-            // Perform a time consuming operation and report progress.
-            foreach (var card in TaskList)
+            try
             {
-                if (string.IsNullOrEmpty(card.ForeignTask))
+                if (string.IsNullOrEmpty(SecretKey))
+                    SecretKey = await GetKey();
+
+                // Perform a time consuming operation and report progress.
+                foreach (var card in cards)
                 {
-                    card.ForeignTask = await TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
-                    card.ForeignTask = card.ForeignTask.Trim().ToLowerInvariant();
+                    if (string.IsNullOrEmpty(card.ForeignTask))
+                    {
+                        card.ForeignTask = await TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
+                        card.ForeignTask = card.ForeignTask.Trim().ToLowerInvariant();
+                    }
+                    else if (string.IsNullOrEmpty(card.NativeTask))
+                    {
+                        card.NativeTask = await TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
+                        card.NativeTask = card.NativeTask.Trim().ToLowerInvariant();
+                    }
                 }
-                else if (string.IsNullOrEmpty(card.NativeTask))
-                {
-                    card.NativeTask = await TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
-                    card.NativeTask = card.NativeTask.Trim().ToLowerInvariant();
-                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteError(ex, ex.Message);
             }
 
             return true;

@@ -22,8 +22,9 @@ namespace Repeater
             container.RegisterType<ILoggerWrap, NLogWrap>();
             container.RegisterType<ILesson, LessonModel>();
             container.RegisterType<IRepository, LessonsLoaderXml>();
-            container.RegisterType<ITranslate, TranslateFacade>();
             container.RegisterType<ITranslateEngine, TranslateEngine>();
+            container.RegisterType<ITranslate, TranslateFacade>(new InjectionProperty("TranslateEngine"),
+                new InjectionProperty("Logger"));
 
             var mainWindowViewModel = new MainWindowViewModel(container);
 
