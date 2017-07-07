@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
+using Repeater.Classes.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 
-namespace Repeater.Classes.TranslateFacade
+namespace Repeater.Classes.TranslateFacade.Classes
 {
     internal class TranslateFacade : ITranslate
     {
@@ -14,10 +14,7 @@ namespace Repeater.Classes.TranslateFacade
         public TranslateFacade(IUnityContainer container)
         {
             TranslateEngine = container.Resolve<ITranslateEngine>();
-            ConfigureBackgroundWorker();
         }
-
-        private BackgroundWorker BackWorker { get; set; }
 
         private List<ICard> TaskList { get; set; }
 
@@ -29,91 +26,40 @@ namespace Repeater.Classes.TranslateFacade
         private ITranslateEngine TranslateEngine { get; }
 
         /// <summary>
-        ///     Основное событие завершения перевода
-        /// </summary>
-        public event EventHandler GetTranslateResultEvent;
-
-        /// <summary>
         ///     Делает перевод текста
         /// </summary>
-        public void Translate(string key, List<ICard> text)
+        public async Task<bool> Translate(string key, List<ICard> text)
         {
             TaskList = text;
 
-            if (BackWorker.IsBusy != true)
-                BackWorker.RunWorkerAsync(key);
+            if (string.IsNullOrEmpty(SecretKey))
+                SecretKey = await GetKey();
+
+            // Perform a time consuming operation and report progress.
+            foreach (var card in TaskList)
+            {
+                if (string.IsNullOrEmpty(card.ForeignTask))
+                {
+                    card.ForeignTask = await TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en");
+                    card.ForeignTask = card.ForeignTask.Trim().ToLowerInvariant();
+                }
+                else if (string.IsNullOrEmpty(card.NativeTask))
+                {
+                    card.NativeTask = await TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru");
+                    card.NativeTask = card.NativeTask.Trim().ToLowerInvariant();
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
         ///     Возвращает ключ
         /// </summary>
-        public string GetKey()
+        public async Task<string> GetKey()
         {
-            var result = TranslateEngine.GetKey();
+            var result = await TranslateEngine.GetKey();
             return result;
-        }
-
-        /// <summary>
-        ///     Рабочий поток BackgroundWorker
-        /// </summary>
-        private void _bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var worker = sender as BackgroundWorker;
-            SecretKey = e.Argument as string;
-
-            if (string.IsNullOrEmpty(SecretKey))
-                SecretKey = GetKey();
-
-            if (worker != null && worker.CancellationPending)
-                e.Cancel = true;
-            else
-            {
-                // Perform a time consuming operation and report progress.
-                foreach (var card in TaskList)
-                {
-                    if (string.IsNullOrEmpty(card.ForeignTask))
-                        card.ForeignTask = TranslateEngine.TranslateText(SecretKey, card.NativeTask, "ru", "en")
-                            .Trim()
-                            .ToLowerInvariant();
-                    else if (string.IsNullOrEmpty(card.NativeTask))
-                        card.NativeTask = TranslateEngine.TranslateText(SecretKey, card.ForeignTask, "en", "ru")
-                            .Trim()
-                            .ToLowerInvariant();
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Событие изменения прогресса BackgroundWorker
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        ///     Событие завершения работы BackgroundWorker
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (GetTranslateResultEvent != null)
-                GetTranslateResultEvent.Invoke(sender, new TranslateEventArgs { Cards = TaskList, Key = SecretKey });
-        }
-
-        /// <summary>
-        /// </summary>
-        private void ConfigureBackgroundWorker()
-        {
-            BackWorker = new BackgroundWorker();
-            BackWorker.WorkerSupportsCancellation = true;
-            BackWorker.WorkerReportsProgress = true;
-
-            BackWorker.DoWork += _bw_DoWork;
-            BackWorker.ProgressChanged += _bw_ProgressChanged;
-            BackWorker.RunWorkerCompleted += _bw_RunWorkerCompleted;
         }
     }
 }

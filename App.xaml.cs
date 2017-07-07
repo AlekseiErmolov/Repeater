@@ -2,7 +2,8 @@
 using Microsoft.Practices.Unity;
 using Repeater.Classes.Helpers;
 using Repeater.Classes.Logs;
-using Repeater.Classes.TranslateFacade;
+using Repeater.Classes.TranslateFacade.Classes;
+using Repeater.Classes.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;

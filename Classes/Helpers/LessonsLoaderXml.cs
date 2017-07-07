@@ -68,7 +68,7 @@ namespace Repeater.Classes.Helpers
                 }
                 catch (Exception ex)
                 {
-                    _logger.WriteError("Error with loading lesson: " + ex.Message);
+                    _logger.WriteError(ex, "Error with loading lesson: " + ex.Message);
                 }
             }
 
@@ -130,7 +130,7 @@ namespace Repeater.Classes.Helpers
             }
             catch (Exception ex)
             {
-                _logger.WriteError("Error with saving card: " + ex.Message);
+                _logger.WriteError(ex, "Error with saving card: " + ex.Message);
             }
         }
 
@@ -176,7 +176,7 @@ namespace Repeater.Classes.Helpers
             }
             catch (Exception ex)
             {
-                _logger.WriteError("Error with saving card: " + ex.Message);
+                _logger.WriteError(ex, "Error with saving card: " + ex.Message);
             }
         }
 
@@ -203,7 +203,7 @@ namespace Repeater.Classes.Helpers
             }
             catch (Exception ex)
             {
-                _logger.WriteError("Error with deleting card: " + ex.Message);
+                _logger.WriteError(ex, "Error with deleting card: " + ex.Message);
             }
         }
     }

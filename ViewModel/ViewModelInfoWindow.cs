@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using Microsoft.Practices.Unity;
 using Repeater.Classes;
 using Repeater.Classes.TranslateFacade;
+using Repeater.Classes.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
 
@@ -180,12 +181,11 @@ namespace Repeater.ViewModel
         ///     Save cards handler
         /// </summary>
         /// <param name="obj"></param>
-        private void AutoTranslateHandler(object obj)
+        private async void AutoTranslateHandler(object obj)
         {
             if (Lesson.Cards != null)
             {
-                _translateFacade.GetTranslateResultEvent += _translateFacade_GetTranslateResultEvent;
-                _translateFacade.Translate(TranslateKey, Lesson.Cards);
+                await _translateFacade.Translate(TranslateKey, Lesson.Cards);
             }
         }
 

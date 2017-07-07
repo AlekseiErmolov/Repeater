@@ -1,16 +1,11 @@
-﻿using Repeater.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Repeater.Interfaces;
 
-namespace Repeater.Classes.TranslateFacade
+namespace Repeater.Classes.TranslateFacade.Interfaces
 {
     public interface ITranslate
     {
-        void Translate(string key, List<ICard> text);
-
-        event EventHandler GetTranslateResultEvent;
+        Task<bool> Translate(string key, List<ICard> text);
     }
 }

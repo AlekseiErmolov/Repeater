@@ -1,30 +1,31 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using Repeater.Interfaces;
 
 namespace Repeater.Classes.Logs
 {
     public class NLogWrap : ILoggerWrap
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public void WriteDebug(string message)
         {
-            logger.Debug(message);
+            Logger.Debug(message);
         }
 
-        public void WriteError(string message)
+        public void WriteError(Exception exception, string message)
         {
-            logger.Error(message);
+            Logger.Error(exception, message);
         }
 
         public void WriteInfo(string message)
         {
-            logger.Info(message);
+            Logger.Info(message);
         }
 
         public void WriteTrace(string message)
         {
-            logger.Trace(message);
+            Logger.Trace(message);
         }
     }
 }

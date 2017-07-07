@@ -1,12 +1,13 @@
-﻿namespace Repeater.Interfaces
+﻿using System;
+
+namespace Repeater.Interfaces
 {
     public interface ILoggerWrap
     {
         /// <summary>
         /// Write error to log
         /// </summary>
-        /// <param name="message"></param>
-        void WriteError(string message);
+        void WriteError(Exception exception, string message);
         /// <summary>
         /// Write info to log
         /// </summary>
