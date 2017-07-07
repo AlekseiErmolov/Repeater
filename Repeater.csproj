@@ -95,6 +95,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -116,34 +117,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Entities\Cards.cs" />
-    <Compile Include="Classes\Enums\EnterState.cs" />
-    <Compile Include="Classes\Helpers\BindingProxy.cs" />
-    <Compile Include="Classes\Helpers\CommonHelpers.cs" />
-    <Compile Include="Classes\Helpers\RelayCommand.cs" />
-    <Compile Include="Classes\Helpers\LessonsLoaderXml.cs" />
-    <Compile Include="Classes\Logs\NLogWrap.cs" />
-    <Compile Include="Classes\MetroMenu\MetroMenu.cs" />
-    <Compile Include="Classes\MetroMenu\MetroMenuItem.cs" />
-    <Compile Include="Classes\MetroMenu\MetroMenuResources.cs" />
-    <Compile Include="Classes\Themes\ThemeBlue.cs" />
-    <Compile Include="Classes\Themes\ThemeBlueGrey.cs" />
-    <Compile Include="Classes\Themes\ThemeCyan.cs" />
-    <Compile Include="Classes\Themes\ThemeGreen.cs" />
-    <Compile Include="Classes\TranslateFacade\Classes\AdmAccessToken.cs" />
-    <Compile Include="Classes\TranslateFacade\Classes\AzureAuthToken.cs" />
-    <Compile Include="Classes\TranslateFacade\Classes\TranslateEngine.cs" />
-    <Compile Include="Classes\TranslateFacade\Classes\TranslateEventArgs.cs" />
-    <Compile Include="Classes\TranslateFacade\Classes\TranslateFacade.cs" />
-    <Compile Include="Classes\TranslateFacade\Entities\WebRequestModel.cs" />
-    <Compile Include="Classes\TranslateFacade\Helpers\JsonHelper.cs" />
-    <Compile Include="Classes\TranslateFacade\Interfaces\ITranslate.cs" />
-    <Compile Include="Classes\TranslateFacade\Interfaces\ITranslateEngine.cs" />
+    <Compile Include="Infrastructures\Entities\Cards.cs" />
+    <Compile Include="Infrastructures\Enums\EnterState.cs" />
+    <Compile Include="Infrastructures\Helpers\BindingProxy.cs" />
+    <Compile Include="Infrastructures\Helpers\CommonHelpers.cs" />
+    <Compile Include="Infrastructures\Helpers\RelayCommand.cs" />
+    <Compile Include="Infrastructures\Helpers\LessonsLoaderXml.cs" />
+    <Compile Include="Infrastructures\Logs\NLogWrap.cs" />
+    <Compile Include="Infrastructures\MetroMenu\MetroMenu.cs" />
+    <Compile Include="Infrastructures\MetroMenu\MetroMenuItem.cs" />
+    <Compile Include="Infrastructures\MetroMenu\MetroMenuResources.cs" />
+    <Compile Include="Infrastructures\Themes\ThemeBlue.cs" />
+    <Compile Include="Infrastructures\Themes\ThemeBlueGrey.cs" />
+    <Compile Include="Infrastructures\Themes\ThemeCyan.cs" />
+    <Compile Include="Infrastructures\Themes\ThemeGreen.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Classes\AdmAccessToken.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Classes\TranslateEngine.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Classes\TranslateEventArgs.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Classes\TranslateFacade.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Entities\WebRequestModel.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Helpers\JsonHelper.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Interfaces\ITranslate.cs" />
+    <Compile Include="Infrastructures\TranslateFacade\Interfaces\ITranslateEngine.cs" />
     <Compile Include="Interfaces\ICards.cs" />
     <Compile Include="Interfaces\ILoggerWrap.cs" />
     <Compile Include="Interfaces\ITheme.cs" />
     <Compile Include="Model\CardModel.cs" />
-    <Compile Include="Classes\Helpers\Constants.cs" />
+    <Compile Include="Infrastructures\Helpers\Constants.cs" />
     <Compile Include="Model\LessonModel.cs" />
     <Compile Include="Interfaces\ICard.cs" />
     <Compile Include="Interfaces\ICardsLoader.cs" />

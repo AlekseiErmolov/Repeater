@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Repeater"
         xmlns:vm="clr-namespace:Repeater.ViewModel"
-        xmlns:helpers="clr-namespace:Repeater.Classes.Helpers"
+        xmlns:helpers="clr-namespace:Repeater.Infrastructures.Helpers"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Title="Repeater" Height="450" Width="650" Style="{DynamicResource MetroWindowStyle}">

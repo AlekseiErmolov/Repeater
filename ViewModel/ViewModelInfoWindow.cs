@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Practices.Unity;
-using Repeater.Classes;
-using Repeater.Classes.TranslateFacade;
-using Repeater.Classes.TranslateFacade.Interfaces;
+using Repeater.Infrastructures.Helpers;
+using Repeater.Infrastructures.TranslateFacade.Classes;
+using Repeater.Infrastructures.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
 

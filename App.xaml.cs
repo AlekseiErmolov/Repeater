@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using Microsoft.Practices.Unity;
-using Repeater.Classes.Helpers;
-using Repeater.Classes.Logs;
-using Repeater.Classes.TranslateFacade.Classes;
-using Repeater.Classes.TranslateFacade.Interfaces;
+using Repeater.Infrastructures.Helpers;
+using Repeater.Infrastructures.Logs;
+using Repeater.Infrastructures.TranslateFacade.Classes;
+using Repeater.Infrastructures.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.ViewModel;
