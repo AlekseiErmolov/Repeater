@@ -4,9 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Microsoft.Practices.Unity;
 using Repeater.Infrastructures.Helpers;
-using Repeater.Infrastructures.TranslateFacade.Classes;
 using Repeater.Infrastructures.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
@@ -16,16 +14,15 @@ namespace Repeater.ViewModel
     public class ViewModelInfoWindow : ViewModelBase
     {
         private readonly DispatcherTimer _dispatcherTimer;
+        private readonly ILoggerWrap _log;
         private readonly IRepository _repository;
         private readonly ITranslate _translateFacade;
-        private readonly ILoggerWrap _log;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public ViewModelInfoWindow(ILesson model, IRepository repo, ITranslate translateEngine, ILoggerWrap logger)
+        public ViewModelInfoWindow(IRepository repo, ITranslate translateEngine, ILoggerWrap logger)
         {
-            Lesson = model;
             _repository = repo;
             _translateFacade = translateEngine;
             _log = logger;
@@ -35,11 +32,19 @@ namespace Repeater.ViewModel
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
         }
 
+        /// <summary>
+        /// Set context for editable lesson
+        /// </summary>
+        public void SetLessonContext(ILesson lesson)
+        {
+            Lesson = lesson;
+        }
+
         private string TranslateKey { get; set; }
 
         #region Properties
 
-        public ILesson Lesson { get; set; }
+        private ILesson Lesson { get; set; }
 
         private ICard _selectedCard;
 
@@ -240,6 +245,7 @@ namespace Repeater.ViewModel
                 _log.WriteError(ex, ex.Message);
             }
         }
+
         #endregion
     }
 }

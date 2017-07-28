@@ -9,7 +9,6 @@ using Repeater.Infrastructures.Themes;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.Properties;
-using Repeater.Services;
 using Repeater.View;
 
 namespace Repeater.ViewModel
@@ -35,7 +34,8 @@ namespace Repeater.ViewModel
         /// <summary>
         ///     Конструктор ViewModel главного окна
         /// </summary>
-        public MainWindowViewModel(ILesson lesson, IRepository repo, IRandomize cardService, ViewModelInfoWindow infoViewModel)
+        public MainWindowViewModel(ILesson lesson, IRepository repo, IRandomize cardService,
+            ViewModelInfoWindow infoViewModel)
         {
             _model = lesson;
             _repository = repo;
@@ -229,11 +229,13 @@ namespace Repeater.ViewModel
             {
                 _menu.Clear();
                 if (_model.LessonsNames != null)
+                {
                     foreach (var lesson in _model.LessonsNames)
                     {
                         if (string.IsNullOrEmpty(lesson)) continue;
                         _menu.Add(lesson.Length <= 15 ? lesson : lesson.Substring(0, 15));
                     }
+                }
                 return _menu;
             }
 
@@ -302,9 +304,13 @@ namespace Repeater.ViewModel
                     return string.Empty;
 
                 if (_invertTask != true)
+                {
                     if (!IsEnableMakeCard)
+                    {
                         if (_enterState == EnterState.First)
                             return string.Empty;
+                    }
+                }
 
                 return _displayedCard.NativeTask;
             }
@@ -330,9 +336,13 @@ namespace Repeater.ViewModel
                     return string.Empty;
 
                 if (_invertTask)
+                {
                     if (!IsEnableMakeCard)
+                    {
                         if (_enterState == EnterState.First)
                             return string.Empty;
+                    }
+                }
 
                 return _displayedCard.ForeignTask;
             }
@@ -358,8 +368,10 @@ namespace Repeater.ViewModel
                     return string.Empty;
 
                 if (!IsEnableMakeCard)
+                {
                     if (_enterState == EnterState.First)
                         return string.Empty;
+                }
 
                 return _displayedCard.Comment;
             }
@@ -525,6 +537,7 @@ namespace Repeater.ViewModel
         #region Commands
 
         private ICommand _renameLesson;
+
         public ICommand RenameLessonCommand
         {
             get { return _renameLesson ?? (_renameLesson = new RelayCommand(RenameLessonCommandHandler)); }
@@ -562,7 +575,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        /// Команда добавления сложного урока в карточку
+        ///     Команда добавления сложного урока в карточку
         /// </summary>
         private void AddHardLessonCommandHandler(object obj)
         {
@@ -572,13 +585,11 @@ namespace Repeater.ViewModel
                     x =>
                         x.ForeignTask.Equals(_displayedCard.ForeignTask) &&
                         x.NativeTask.Equals(_displayedCard.NativeTask)))
-            {
                 _repository.SaveToLessonNewCard(Constants.DefaultLessonName, _displayedCard);
-            }
         }
 
         /// <summary>
-        /// Контекстное меню - переименовать урок
+        ///     Контекстное меню - переименовать урок
         /// </summary>
         private void RenameLessonCommandHandler(object obj)
         {
@@ -666,9 +677,7 @@ namespace Repeater.ViewModel
 
                 case EnterState.Second:
                     if (_cardsCount - _correctAnswerCnt - _incorrectAnswerCnt == 0)
-                    {
                         IsRepeat = true;
-                    }
                     else
                     {
                         _displayedCard = _cardsService.GetCardReduceList(_model.Cards);
@@ -815,6 +824,8 @@ namespace Repeater.ViewModel
         private void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
+
+            _infoViewModel.SetLessonContext(_model);
             var win = new LessonInfo(_infoViewModel);
             win.Show();
         }
