@@ -18,17 +18,17 @@ namespace Repeater.ViewModel
         private readonly DispatcherTimer _dispatcherTimer;
         private readonly IRepository _repository;
         private readonly ITranslate _translateFacade;
+        private readonly ILoggerWrap _log;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="container"></param>
-        public ViewModelInfoWindow(ILesson model, IUnityContainer container)
+        public ViewModelInfoWindow(ILesson model, IRepository repo, ITranslate translateEngine, ILoggerWrap logger)
         {
             Lesson = model;
-            _repository = container.Resolve<IRepository>();
-            _translateFacade = container.Resolve<ITranslate>();
+            _repository = repo;
+            _translateFacade = translateEngine;
+            _log = logger;
 
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += dispatcherTimer_Tick;
@@ -186,6 +186,7 @@ namespace Repeater.ViewModel
             if (Lesson.Cards != null)
             {
                 await _translateFacade.Translate(TranslateKey, Lesson.Cards);
+                NotifyPropertyChanged("Cards");
             }
         }
 
@@ -212,40 +213,33 @@ namespace Repeater.ViewModel
         /// </summary>
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (Clipboard.ContainsText(TextDataFormat.Text))
+            try
             {
-                var clipboardText = Clipboard.GetText(TextDataFormat.Text);
-                if (!string.IsNullOrEmpty(clipboardText))
+                if (Clipboard.ContainsText(TextDataFormat.Text))
                 {
-                    clipboardText = clipboardText.Trim().ToLowerInvariant();
-                    if (!Lesson.Cards.Any(x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
+                    var clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                    if (!string.IsNullOrEmpty(clipboardText))
                     {
-                        Clipboard.SetText(string.Empty);
-
-                        Lesson.Cards.Add(new Card
+                        clipboardText = clipboardText.Trim().ToLowerInvariant();
+                        if (!Lesson.Cards.Any(
+                            x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
                         {
-                            ForeignTask = clipboardText
-                        });
-                        NotifyPropertyChanged("Cards");
+                            Clipboard.SetText(string.Empty);
+
+                            Lesson.Cards.Add(new Card
+                            {
+                                ForeignTask = clipboardText
+                            });
+                            NotifyPropertyChanged("Cards");
+                        }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        ///     Translate completion event - get the result
-        /// </summary>
-        private void _translateFacade_GetTranslateResultEvent(object sender, EventArgs e)
-        {
-            var ev = e as TranslateEventArgs;
-            if (ev != null)
+            catch (Exception ex)
             {
-                TranslateKey = ev.Key;
-                Lesson.Cards = ev.Cards;
-                NotifyPropertyChanged("Cards");
+                _log.WriteError(ex, ex.Message);
             }
         }
-
         #endregion
     }
 }

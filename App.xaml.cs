@@ -6,6 +6,7 @@ using Repeater.Infrastructures.TranslateFacade.Classes;
 using Repeater.Infrastructures.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
+using Repeater.Services;
 using Repeater.ViewModel;
 
 namespace Repeater
@@ -19,18 +20,21 @@ namespace Repeater
         {
             var container = new UnityContainer();
 
-            container.RegisterType<ILoggerWrap, NLogWrap>();
-            container.RegisterType<ILesson, LessonModel>();
-            container.RegisterType<IRepository, LessonsLoaderXml>();
-            container.RegisterType<ITranslateEngine, TranslateEngine>();
-            container.RegisterType<ITranslate, TranslateFacade>(new InjectionProperty("TranslateEngine"),
-                new InjectionProperty("Logger"));
+            container.RegisterType<ILoggerWrap, NLogWrap>()
+                .RegisterType<ILesson, LessonModel>()
+                .RegisterType<IRepository, LessonsLoaderXml>()
+                .RegisterType<ITranslateEngine, TranslateEngine>()
+                .RegisterType<ITranslate, TranslateFacade>(new InjectionProperty("TranslateEngine"),
+                    new InjectionProperty("Logger"))
+                .RegisterType<IRandomize, CardsService>()
+                .RegisterInstance(typeof(ViewModelInfoWindow))
+                .RegisterInstance(typeof(MainWindowViewModel));
 
-            var mainWindowViewModel = new MainWindowViewModel(container);
+            var mainViewModel = container.Resolve<MainWindowViewModel>();
 
             MainWindow = new MainWindow
             {
-                DataContext = mainWindowViewModel
+                DataContext = mainViewModel
             };
             MainWindow.Show();
         }

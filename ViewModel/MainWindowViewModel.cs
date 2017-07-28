@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Practices.Unity;
 using Repeater.Infrastructures.Enums;
 using Repeater.Infrastructures.Helpers;
 using Repeater.Infrastructures.MetroMenu;
@@ -23,11 +22,11 @@ namespace Repeater.ViewModel
         private readonly IRepository _repository;
         private readonly IRandomize _cardsService;
 
-        private readonly IUnityContainer _container;
-
         private ICommand _enterCommand;
         private EnterState _enterState;
         private ICard _displayedCard;
+
+        private readonly ViewModelInfoWindow _infoViewModel;
 
         #endregion
 
@@ -36,14 +35,15 @@ namespace Repeater.ViewModel
         /// <summary>
         ///     Конструктор ViewModel главного окна
         /// </summary>
-        public MainWindowViewModel(IUnityContainer container)
+        public MainWindowViewModel(ILesson lesson, IRepository repo, IRandomize cardService, ViewModelInfoWindow infoViewModel)
         {
-            _model = container.Resolve<ILesson>();
-            _repository = container.Resolve<IRepository>();
-            _container = container;
+            _model = lesson;
+            _repository = repo;
+            _infoViewModel = infoViewModel;
 
-            _cardsService = new CardsService();
+            _cardsService = cardService;
             _menu = new MetroMenu();
+
             _menu.MenuSelectEvent += _menu_MenuSelectEvent;
             _isEnableToEnterFileName = false;
             NotifyPropertyChanged("IsEnableToEnterFileName");
@@ -815,7 +815,7 @@ namespace Repeater.ViewModel
         private void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);
-            var win = new LessonInfo(new ViewModelInfoWindow(_model, _container));
+            var win = new LessonInfo(_infoViewModel);
             win.Show();
         }
 
