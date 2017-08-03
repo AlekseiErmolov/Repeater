@@ -23,7 +23,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Получает ключ
+        ///     Get key from outside.
         /// </summary>
         public async Task<string> GetKey()
         {
@@ -31,7 +31,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Делает запрос и получает переведенный текст
+        ///     Translate a word.
         /// </summary>
         public async Task<string> TranslateText(string key, string txtToTranslate, string from, string to)
         {
@@ -51,7 +51,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Билдит запрос для авторизации
+        ///     Build auth request.
         /// </summary>
         private WebRequestModel BuildAuthentificateWebService()
         {
@@ -76,7 +76,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Формирует запрос для перевода
+        ///     Build translate request.
         /// </summary>
         private WebRequestModel BuildTranslateRequest(string key, string txtToTranslate, string from, string to)
         {
@@ -98,7 +98,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Формирует заголовок
+        ///     Create request header.
         /// </summary>
         private async Task<string> GetAuthenticateHeader()
         {
@@ -118,7 +118,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Получение результат
+        ///     Get the result from outside.
         /// </summary>
         private async Task<string> GetResponse(WebRequestModel requestModel)
         {

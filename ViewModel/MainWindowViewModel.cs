@@ -32,7 +32,7 @@ namespace Repeater.ViewModel
         #region Constructors
 
         /// <summary>
-        ///     Конструктор ViewModel главного окна
+        ///     .ctor
         /// </summary>
         public MainWindowViewModel(ILesson lesson, IRepository repo, ICardService cardService,
             ViewModelInfoWindow infoViewModel)
@@ -71,7 +71,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Событие выбора урока
+        ///     Menu select event.
         /// </summary>
         /// <param name="name"></param>
         private void _menu_MenuSelectEvent(string name)
@@ -119,8 +119,6 @@ namespace Repeater.ViewModel
         public bool IsEditableTitle { get; set; }
 
 
-        /// <summary>
-        /// </summary>
         private ITheme _theme;
 
         public ITheme Theme
@@ -137,43 +135,33 @@ namespace Repeater.ViewModel
             }
         }
 
-        /// <summary>
-        /// </summary>
         public string TitleColor
         {
             get { return Theme.TitleColor; }
         }
 
-        /// <summary>
-        /// </summary>
         public string TextColor
         {
             get { return Theme.TextColor; }
         }
 
-        /// <summary>
-        /// </summary>
         public string MenuColor
         {
             get { return Theme.MenuColor; }
         }
 
-        /// <summary>
-        /// </summary>
         public string ProgressColor
         {
             get { return Theme.ProgressColor; }
         }
 
-        /// <summary>
-        /// </summary>
         public string ProgressStatusColor
         {
             get { return Theme.ProgressStatusColor; }
         }
 
         /// <summary>
-        ///     Флаг разрешения добавления новой карточки
+        ///     Flag that allows to add new card.
         /// </summary>
         private bool _isEnableMakeCard;
 
@@ -188,7 +176,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Разрешено ли вводить имя нового урока
+        ///     Flag that allows to enter card name.
         /// </summary>
         private bool _isEnableToEnterFileName;
 
@@ -203,7 +191,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Количество пройденных карточек в уроке
+        ///     Quantity of done cards.
         /// </summary>
         private int _correctAnswerCnt;
 
@@ -219,7 +207,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Меню уроков
+        ///     Lesson menu.
         /// </summary>
         private MetroMenu _menu;
 
@@ -247,7 +235,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Количество неправильных ответов
+        ///     Wrong cards quantity.
         /// </summary>
         private int _incorrectAnswerCnt;
 
@@ -262,7 +250,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Цвет пользовательского ответа
+        ///     Foreground user answer text.
         /// </summary>
         private Brush _foregroundColor = Brushes.Black;
 
@@ -278,7 +266,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Введенный ответ от пользователя
+        ///     Entered user answer.
         /// </summary>
         private string _userText;
 
@@ -294,7 +282,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Поле задания на родном
+        ///     Native answer field.
         /// </summary>
         public string NativeTask
         {
@@ -326,7 +314,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Поле задания на иностранном
+        ///     Foreign answer field.
         /// </summary>
         public string ForeignTask
         {
@@ -358,7 +346,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Поле комментария
+        ///     Comment answer field.
         /// </summary>
         public string Comment
         {
@@ -387,7 +375,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Флаг инверсии заданий
+        ///     Flag of lesson inversion.
         /// </summary>
         private bool _invertTask;
 
@@ -419,7 +407,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Количество карточек в уроке
+        ///     Cards quantity.
         /// </summary>
         private int _cardsCount;
 
@@ -434,15 +422,11 @@ namespace Repeater.ViewModel
             }
         }
 
-        /// <summary>
-        /// </summary>
         public string CardsCountString
         {
             get { return CardsCount.ToString(); }
         }
 
-        /// <summary>
-        /// </summary>
         public string OpenedLesson
         {
             get { return _model.OpenedLessonName; }
@@ -458,8 +442,6 @@ namespace Repeater.ViewModel
 
         #region ThemesCommands
 
-        /// <summary>
-        /// </summary>
         private ICommand _cyanThemeCommand;
 
         public ICommand CyanThemeCommand
@@ -468,9 +450,6 @@ namespace Repeater.ViewModel
             set { _cyanThemeCommand = value; }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="obj"></param>
         private void CyanThemeCommandHandler(object obj)
         {
             Theme = new ThemeCyan();
@@ -492,9 +471,6 @@ namespace Repeater.ViewModel
             get { return _greenThemeCommand ?? (_greenThemeCommand = new RelayCommand(GreenThemeCommandHandler)); }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="obj"></param>
         private void GreenThemeCommandHandler(object obj)
         {
             Theme = new ThemeGreen();
@@ -502,9 +478,6 @@ namespace Repeater.ViewModel
             Settings.Default.Save();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="obj"></param>
         private void GrayThemeCommandCommandHandler(object obj)
         {
             Theme = new ThemeBlueGrey();
@@ -512,8 +485,6 @@ namespace Repeater.ViewModel
             Settings.Default.Save();
         }
 
-        /// <summary>
-        /// </summary>
         private ICommand _blueThemeCommand;
 
         public ICommand BlueThemeCommand
@@ -522,9 +493,6 @@ namespace Repeater.ViewModel
             set { _blueThemeCommand = value; }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="obj"></param>
         private void BlueThemeCommandHandler(object obj)
         {
             Theme = new ThemeBlue();
@@ -545,7 +513,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Команда добавления сложного урока в карточку
+        ///     Add card to Hard group.
         /// </summary>
         private ICommand _addHardLesson;
 
@@ -556,6 +524,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
+        ///     Repeat lesson command.
         /// </summary>
         private ICommand _repeatCommand;
 
@@ -566,16 +535,13 @@ namespace Repeater.ViewModel
         }
 
 
-        /// <summary>
-        /// </summary>
-        /// <param name="obj"></param>
         private void RepeatCommandHandler(object obj)
         {
             Repeat();
         }
 
         /// <summary>
-        ///     Команда добавления сложного урока в карточку
+        ///     Add card to Hard group handler.
         /// </summary>
         private void AddHardLessonCommandHandler(object obj)
         {
@@ -589,7 +555,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Контекстное меню - переименовать урок
+        ///     Rename lesson handler.
         /// </summary>
         private void RenameLessonCommandHandler(object obj)
         {
@@ -599,7 +565,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Команда создания нового урока
+        ///     New lesson command.
         /// </summary>
         private ICommand _newLessonCommand;
 
@@ -609,17 +575,11 @@ namespace Repeater.ViewModel
             set { _newLessonCommand = value; }
         }
 
-        /// <summary>
-        ///     Событие создания нового урока
-        /// </summary>
-        /// <param name="obj"></param>
         private void NewLessonCommandHandler(object obj)
         {
             IsEnableToEnterFileName = true;
         }
 
-        /// <summary>
-        /// </summary>
         private ICommand _createNewLessonFileCommand;
 
         public ICommand CreateNewLessonFileCommand
@@ -636,10 +596,6 @@ namespace Repeater.ViewModel
             }
         }
 
-        /// <summary>
-        ///     Событие создания нового урока
-        /// </summary>
-        /// <param name="obj"></param>
         private void CreateNewLessonFileCommandHandler(object obj)
         {
             IsEnableToEnterFileName = false;
@@ -650,7 +606,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Команда нажатия Enter на поле ответов
+        ///     Enter event command.
         /// </summary>
         public ICommand EnterCommand
         {
@@ -660,7 +616,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Обработчик нажатия Enter на поле с ответами
+        ///     Enter event command handler.
         /// </summary>
         /// <param name="obj"></param>
         private void EnterCommandHandler(object obj)
@@ -697,7 +653,7 @@ namespace Repeater.ViewModel
         #region Methods
 
         /// <summary>
-        ///     Открытие нового урока по выбору пользователя
+        ///     Open selected lesson from repo.
         /// </summary>
         private void OpenSelectedLesson(string name)
         {
@@ -714,9 +670,6 @@ namespace Repeater.ViewModel
         }
 
 
-        /// <summary>
-        ///     Получение новой карточки для отображения
-        /// </summary>
         private void RefreshCard()
         {
             NotifyPropertyChanged("Comment");
@@ -726,9 +679,6 @@ namespace Repeater.ViewModel
         }
 
 
-        /// <summary>
-        ///     Проверка правильности ввода ответа
-        /// </summary>
         private void SpellChecking()
         {
             if (string.IsNullOrEmpty(UserText))
@@ -762,8 +712,6 @@ namespace Repeater.ViewModel
             }
         }
 
-        /// <summary>
-        /// </summary>
         private void ClearCard()
         {
             ForeignTask = string.Empty;
@@ -777,9 +725,6 @@ namespace Repeater.ViewModel
             IncorrectAnswerCnt = 0;
         }
 
-        /// <summary>
-        ///     Загрузка темы
-        /// </summary>
         private void LoadTheme()
         {
             var theme = Settings.Default.Theme;
@@ -808,7 +753,7 @@ namespace Repeater.ViewModel
         }
 
         /// <summary>
-        ///     Повтор выбранного урока
+        ///     Repeat selected lesson.
         /// </summary>
         private void Repeat()
         {
@@ -821,6 +766,9 @@ namespace Repeater.ViewModel
         }
 
 
+        /// <summary>
+        ///     Show information window with cards list.
+        /// </summary>
         private void OpenInfoWindow(object parameter)
         {
             _model.Cards = _repository.LoadLesson(_model.OpenedLessonName);

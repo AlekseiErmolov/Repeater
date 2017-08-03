@@ -10,7 +10,7 @@ namespace Repeater.Infrastructure.Helpers
         private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
 
-        #endregion // Fields
+        #endregion
 
         #region Constructors
 
@@ -25,7 +25,7 @@ namespace Repeater.Infrastructure.Helpers
             _canExecute = canExecute;
         }
 
-        #endregion // Constructors
+        #endregion
 
         #region ICommand Members
 
@@ -45,6 +45,6 @@ namespace Repeater.Infrastructure.Helpers
             _execute(parameter);
         }
 
-        #endregion // ICommand Members
+        #endregion
     }
 }

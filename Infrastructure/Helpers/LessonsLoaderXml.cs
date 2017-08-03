@@ -20,7 +20,7 @@ namespace Repeater.Infrastructure.Helpers
 
 
         /// <summary>
-        ///     Создает новый урок
+        ///     Create a new lesson.
         /// </summary>
         public void CreateNewLesson(string lessonName)
         {
@@ -43,7 +43,7 @@ namespace Repeater.Infrastructure.Helpers
 
 
         /// <summary>
-        ///     Загружает урок
+        ///     Load lesson.
         /// </summary>
         public List<ICard> LoadLesson(string id)
         {
@@ -75,7 +75,7 @@ namespace Repeater.Infrastructure.Helpers
 
 
         /// <summary>
-        ///     Загружает имя уроков в директории
+        ///     Get all lessons names in directory.
         /// </summary>
         public List<string> LoadLessonsName()
         {
@@ -96,7 +96,7 @@ namespace Repeater.Infrastructure.Helpers
 
 
         /// <summary>
-        ///     Записывает новую карточку в файл урока
+        ///     Add card to lesson.
         /// </summary>
         public void SaveToLessonNewCard(string lessonName, ICard card)
         {
@@ -131,7 +131,7 @@ namespace Repeater.Infrastructure.Helpers
         }
 
         /// <summary>
-        ///     Пересохраняет урок с новым набором карточек
+        ///     Resave lesson.
         /// </summary>
         public void ResaveLesson(string lessonName, List<ICard> cards)
         {
@@ -179,7 +179,7 @@ namespace Repeater.Infrastructure.Helpers
 
 
         /// <summary>
-        ///     Удаляет заданную карту
+        ///     Drop card in lesson.
         /// </summary>
         public void DeleteCard(string lessonName, ICard card)
         {

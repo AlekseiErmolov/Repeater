@@ -9,16 +9,11 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
     internal class TranslateFacade : ITranslate
     {
         private string SecretKey { get; set; }
-
-        /// <summary>
-        ///     Движок перевода
-        /// </summary>
         public ITranslateEngine TranslateEngine { get; set; }
-
         public ILoggerWrap Logger { get; set; }
 
         /// <summary>
-        ///     Делает перевод текста
+        ///     Translate all cards.
         /// </summary>
         public async Task<bool> Translate(string key, List<ICard> cards)
         {
@@ -51,7 +46,7 @@ namespace Repeater.Infrastructure.TranslateFacade.Classes
         }
 
         /// <summary>
-        ///     Возвращает ключ
+        ///     Get the auth key.
         /// </summary>
         public async Task<string> GetKey()
         {
