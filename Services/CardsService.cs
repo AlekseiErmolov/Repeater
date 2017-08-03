@@ -5,7 +5,7 @@ using Repeater.Interfaces;
 
 namespace Repeater.Services
 {
-    internal class CardsService : IRandomize
+    internal class CardsService : ICardService
     {
         private readonly Random _rnd;
 

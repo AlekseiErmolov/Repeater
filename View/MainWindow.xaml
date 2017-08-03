@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Repeater"
         xmlns:vm="clr-namespace:Repeater.ViewModel"
-        xmlns:helpers="clr-namespace:Repeater.Infrastructures.Helpers"
+        xmlns:helpers1="clr-namespace:Repeater.Infrastructure.Helpers"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Title="Repeater" Height="450" Width="650" Style="{DynamicResource MetroWindowStyle}">
@@ -590,7 +590,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid.Resources>
-                    <helpers:BindingProxy x:Key="Proxy" Data="{Binding}" />
+                    <helpers1:BindingProxy x:Key="Proxy" Data="{Binding}" />
                 </Grid.Resources>
 
                 <ListBox 

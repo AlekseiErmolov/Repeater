@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
-using Repeater.Infrastructures.Enums;
-using Repeater.Infrastructures.Helpers;
-using Repeater.Infrastructures.MetroMenu;
-using Repeater.Infrastructures.Themes;
+using Repeater.Infrastructure.Enums;
+using Repeater.Infrastructure.Helpers;
+using Repeater.Infrastructure.MetroMenu;
+using Repeater.Infrastructure.Themes;
 using Repeater.Interfaces;
 using Repeater.Model;
 using Repeater.Properties;
@@ -19,7 +19,7 @@ namespace Repeater.ViewModel
 
         private readonly ILesson _model;
         private readonly IRepository _repository;
-        private readonly IRandomize _cardsService;
+        private readonly ICardService _cardsService;
 
         private ICommand _enterCommand;
         private EnterState _enterState;
@@ -34,7 +34,7 @@ namespace Repeater.ViewModel
         /// <summary>
         ///     Конструктор ViewModel главного окна
         /// </summary>
-        public MainWindowViewModel(ILesson lesson, IRepository repo, IRandomize cardService,
+        public MainWindowViewModel(ILesson lesson, IRepository repo, ICardService cardService,
             ViewModelInfoWindow infoViewModel)
         {
             _model = lesson;

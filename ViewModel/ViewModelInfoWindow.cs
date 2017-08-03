@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Repeater.Infrastructures.Helpers;
-using Repeater.Infrastructures.TranslateFacade.Interfaces;
+using Repeater.Infrastructure.Helpers;
+using Repeater.Infrastructure.TranslateFacade.Interfaces;
 using Repeater.Interfaces;
 using Repeater.Model;
 
@@ -220,25 +220,28 @@ namespace Repeater.ViewModel
         {
             try
             {
-                if (Clipboard.ContainsText(TextDataFormat.Text))
-                {
-                    var clipboardText = Clipboard.GetText(TextDataFormat.Text);
-                    if (!string.IsNullOrEmpty(clipboardText))
-                    {
-                        clipboardText = clipboardText.Trim().ToLowerInvariant();
-                        if (!Lesson.Cards.Any(
-                            x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            Clipboard.SetText(string.Empty);
+                if (!Clipboard.ContainsText(TextDataFormat.Text))
+                    return;
 
-                            Lesson.Cards.Add(new Card
-                            {
-                                ForeignTask = clipboardText
-                            });
-                            NotifyPropertyChanged("Cards");
-                        }
-                    }
-                }
+                var clipboardText = Clipboard.GetText(TextDataFormat.Text);
+
+                if (string.IsNullOrEmpty(clipboardText))
+                    return;
+
+                clipboardText = clipboardText.Trim().ToLowerInvariant();
+
+                if (Lesson.Cards.Any(
+                    x => x.ForeignTask.Equals(clipboardText, StringComparison.OrdinalIgnoreCase)))
+                    return;
+
+                Clipboard.SetText(string.Empty);
+
+                Lesson.Cards.Add(new Card
+                {
+                    ForeignTask = clipboardText
+                });
+
+                NotifyPropertyChanged("Cards");
             }
             catch (Exception ex)
             {
